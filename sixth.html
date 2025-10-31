@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Section</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Press Start 2P', cursive;
+    background: #d0f0ff url("project.png") no-repeat center center;
+    background-size: cover;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #typing {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 500;
+    color: #fffdf0;
+    text-align: center;
+    max-width: 80%;
+    line-height: 1.9;
+    opacity: 0;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7),
+                 0 0 12px rgba(255,255,255,0.2);
+    transition: opacity 1.5s ease, transform 0.8s ease;
+    padding: 15px 25px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(2px);
+  }
+
+  .object {
+    width: 90px;
+    height: 90px;
+    background: rgba(143, 97, 67, 0.85);
+    border: 3px solid #d3a066;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(255, 220, 150, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #fceabb;
+    text-shadow: 0 0 4px rgba(255, 230, 150, 0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
+    backdrop-filter: blur(1px);
+    cursor: pointer;
+  }
+
+  .object:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 25px rgba(255, 230, 150, 0.8);
+  }
+
+  .bubble {
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(242, 224, 191, 0.95);
+    border: 3px solid #a06f4c;
+    padding: 12px;
+    border-radius: 8px;
+    max-width: 220px;
+    color: #5c3b2e;
+    font-size: 10px;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    text-align: center;
+  }
+
+  .object-container, .object-container1, .object-container2 {
+    position: absolute;
+    text-align: center;
+  }
+
+  .object-container { top: 50%; left: 23%; }
+  .object-container1 { top: 50%; left: 55%; }
+  .object-container2 { top: 85%; left: 18%; }
+
+  .object-container:hover .bubble,
+  .object-container1:hover .bubble,
+  .object-container2:hover .bubble {
+    opacity: 1;
+  }
+
+  .next-btn {
+    position: absolute;
+    bottom: 40px;
+    right: 50px;
+    background: linear-gradient(135deg, #ffb6c1, #ff80ab);
+    color: white;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 40px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 128, 171, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+  }
+
+  .next-btn.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+</style>
+</head>
+<body>
+
+<div id="typing"></div>
+
+<div class="object-container">
+  <div class="object" data-id="1" data-link="ex.html">🎨</div>
+  <div class="bubble">Explore my design projects</div>
+</div>
+
+<div class="object-container1">
+  <div class="object" data-id="2" data-link="projectforprogramming.html">💻</div>
+  <div class="bubble">Check out my Design and development projects</div>
+</div>
+
+<div class="object-container2">
+  <div class="object" data-id="3" data-link="development.html">🌟</div>
+  <div class="bubble">Discover my Development projects</div>
+</div>
+
+<button class="next-btn" id="proceedBtn" onclick="window.location.href='unlockdoor.html'">
+  Proceed →
+</button>
+
+<!-- Background music -->
+<audio id="bgMusic" src="audio.mp3" ></audio>
+
+<!-- Voice narration -->
+<audio id="voiceNarration" src="bg-music.mp3" loop></audio>
+
+
+<script>
+  // Typing effect
+  const lines = [
+    "Every project I touch bears the weight of my relentless effort and sleepless nights.",
+    "Between the logic of code and the beauty of design, I pour my soul into creation.",
+    "Mistakes become lessons, challenges become milestones, and every line written tells my story.",
+    "Through perseverance, late nights, and countless revisions, I transform ideas into reality.",
+    "All my sweat, patience, and passion culminate here — in the worlds I build."
+  ];
+
+  const typingDiv = document.getElementById('typing');
+  let currentLine = 0;
+
+  function typeLine(line, callback) {
+    let i = 0;
+    typingDiv.style.opacity = 1;
+    typingDiv.textContent = '';
+    function typeChar() {
+      if (i < line.length) {
+        typingDiv.textContent += line.charAt(i);
+        i++;
+        setTimeout(typeChar, 50);
+      } else {
+        setTimeout(() => {
+          typingDiv.style.opacity = 0;
+          setTimeout(callback, 2000);
+        }, 1000);
+      }
+    }
+    typeChar();
+  }
+
+  function nextLine() {
+    if (currentLine < lines.length) {
+      typeLine(lines[currentLine], () => {
+        currentLine++;
+        nextLine();
+      });
+    } else {
+      typingDiv.textContent = "Welcome to My Project";
+      typingDiv.style.opacity = 1;
+    }
+  }
+  nextLine();
+
+  // Track clicks with localStorage
+  const objects = document.querySelectorAll('.object');
+  const proceedBtn = document.getElementById('proceedBtn');
+
+  // Retrieve clicked IDs from localStorage or empty array
+  let clickedIds = JSON.parse(localStorage.getItem('clickedObjects')) || [];
+
+  // If all already clicked, show proceed button immediately
+  if (clickedIds.length === objects.length) {
+    proceedBtn.classList.add('show');
+  }
+
+  objects.forEach(obj => {
+    const id = obj.dataset.id;
+    const link = obj.dataset.link;
+
+    // Highlight objects already clicked
+    if (clickedIds.includes(id)) {
+      obj.style.boxShadow = '0 0 30px rgba(255, 255, 200, 0.8)';
+    }
+
+    obj.addEventListener('click', () => {
+      // Mark as clicked if not already
+      if (!clickedIds.includes(id)) {
+        clickedIds.push(id);
+        localStorage.setItem('clickedObjects', JSON.stringify(clickedIds));
+        obj.style.transform = 'scale(1.2)';
+        obj.style.boxShadow = '0 0 30px rgba(255, 255, 200, 0.8)';
+        setTimeout(() => obj.style.transform = '', 300);
+      }
+
+      // Show proceed button if all clicked
+      if (clickedIds.length === objects.length) {
+        proceedBtn.classList.add('show');
+      }
+
+      // Navigate to object's link
+      window.location.href = link;
+    });
+  });
+
+  proceedBtn.addEventListener('click', () => {
+    window.location.href = 'unlockdoor.html';
+  });
+  
+  const bgMusic = document.getElementById("bgMusic");
+const voiceNarration = document.getElementById("voiceNarration");
+
+// Fade-in background music
+function fadeInAudio(audio, duration = 5000, targetVolume = 1) {
+  let volume = 0;
+  audio.volume = 0;
+  audio.play().catch(() => console.log("Autoplay blocked"));
+
+  const intervalTime = 50;
+  const increment = (targetVolume * intervalTime) / duration;
+
+  const fade = setInterval(() => {
+    volume += increment;
+    if (volume >= targetVolume) {
+      audio.volume = targetVolume;
+      clearInterval(fade);
+    } else {
+      audio.volume = volume;
+    }
+  }, intervalTime);
+}
+
+window.addEventListener("load", () => {
+  fadeInAudio(bgMusic, 3000, 1);
+
+  // Play voice narration once
+  voiceNarration.play().catch(() => {
+    // If blocked, play on first click
+    document.body.addEventListener("click", () => {
+      voiceNarration.play();
+      bgMusic.play();
+    }, { once: true });
+  });
+});
+</script>
+
+</script>
+
+</body>
+</html>

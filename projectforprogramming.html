@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recent Work — Aesthetic Grid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #fff6f8;
+      --bg2: #fffaf6;
+      --accent: #ff557a;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: #0f172a;
+      padding: 48px 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 28px
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 34px
+    }
+
+    .title .spark {
+      font-size: 22px;
+      margin-top: -4px
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.45;
+      font-weight: 400
+    }
+
+    /* Decorative floating corner shapes */
+    .decor {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 48px;
+      filter: blur(28px);
+      opacity: 0.12;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .d1 {
+      background: linear-gradient(135deg, #ffdbe6, #ffd0dd);
+      left: -40px;
+      top: -20px;
+    }
+
+    .d2 {
+      background: linear-gradient(135deg, #dfe7ff, #e6f7ff);
+      right: -40px;
+      bottom: -80px;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(15deg);
+      }
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media(min-width:640px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width:1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: linear-gradient(180deg, var(--card-bg), #fff);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .4s cubic-bezier(.2, .9, .3, 1), box-shadow .4s, filter .4s;
+      position: relative;
+      will-change: transform;
+    }
+
+    .card:hover {
+      transform: translateY(-12px) rotateX(2deg) rotateY(2deg);
+      box-shadow: 0 20px 60px rgba(16, 24, 40, 0.18);
+      filter: brightness(1.05);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb-wrap::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      box-shadow: inset 0 -40px 80px rgba(15, 23, 42, 0.04);
+      pointer-events: none;
+    }
+
+    /* Gradient overlay on thumbnails */
+    .thumb-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 85, 122, 0.1), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .thumbnail {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+      background: linear-gradient(135deg, #f6f9ff, #fff6f6);
+    }
+
+    /* Staggered card heights */
+    .grid .card:nth-child(odd) .thumbnail {
+      height: 340px;
+    }
+
+    .grid .card:nth-child(even) .thumbnail {
+      height: 280px;
+    }
+
+    .card-body {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+      padding: 20px;
+      border-radius: 0 0 18px 18px;
+      transition: background 0.3s;
+    }
+
+    .card:hover .card-body {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 240, 245, 0.9));
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #fff0f3;
+      color: var(--accent);
+      font-weight: 600;
+      border: 1px solid rgba(255, 85, 122, 0.08);
+    }
+
+    .h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 6px 0;
+      color: #0b1220;
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .link {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      grid-column: span 2;
+    }
+
+    @media(min-width:1024px) {
+      .hero-card {
+        grid-column: span 2;
+      }
+    }
+
+    .corner {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      height: 42px;
+      width: 42px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255, 85, 122, 0.10), rgba(255, 85, 122, 0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    /* Next button */
+    .next-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #ffb6c1, #ff80ab);
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .next-btn:hover {
+      background: linear-gradient(135deg, #ff80ab, #ff4081);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(255, 64, 129, 0.6);
+    }
+
+    .next-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(255, 64, 129, 0.4);
+    }
+
+    /* Modal */
+    /* Modal base */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(255, 192, 203, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+.modal.active {
+  display: block;
+}
+
+.modal-content {
+  background: white;
+  margin: 80px auto;
+  padding: 24px;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 700px;
+
+  /* Make scrollable */
+  max-height: 80vh;   /* Limit height to 80% of viewport */
+  overflow-y: auto;   /* Enable vertical scroll */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  
+  position: relative;
+  box-shadow: 0 8px 24px rgba(255, 102, 153, 0.25);
+  text-align: center;
+  animation: fadeUpModal 0.6s ease;
+  transform: translateY(30px);
+}
+
+.modal-content h2 {
+  color: #ff6699;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  color: #555;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff6699;
+}
+
+/* Video fade-up effect */
+
+#modalVideo {
+  width: 100%;       /* Full width of modal */
+  max-width: 100%;   /* Prevent overflow */
+  height: auto;      /* Maintain aspect ratio */
+  max-height: 60vh;  /* Limit height so it doesn't exceed viewport */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(255, 85, 122, 0.3);
+  margin-top: 20px;
+  display: block;
+}
+
+
+
+#modalVideo.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="decor d1"></div>
+  <div class="decor d2"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="title"><span class="spark">✨</span>
+        <div>My Recent Work <span style="font-weight:500;color:var(--muted)">(Design and Development)</span></div>
+      </div>
+      <p class="subtitle">Blending creativity and technology, I bring ideas to life through thoughtful design and precise development. Every project is crafted to be both visually engaging and functionally seamless, turning concepts into interactive experiences that leave an impact.</p>
+    </header>
+
+    <div class="grid">
+      <!-- CARD 1: VIDEO -->
+      <div class="card hero-card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="counselling_webpage.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">React</div>
+            <div class="chip">Node.js</div>
+          </div>
+          <h3 class="h3">My Counseling App</h3>
+          <p class="desc">A web app designed to support users facing emotional stress. Users can input their feelings and receive empathetic responses, helpline info, and helpful suggestions, providing comfort and reassurance in a safe, approachable platform..</p>
+          
+          <a href="#" class="link" data-title="Counseling App"  data-video="counselling_webpage.mp4" data-desc="<b>Conceptualisation</b><br><br>
+I decided to create this counseling website because it addresses a real problem: many people facing emotional stress hesitate to seek a real-life counsellor. This resonated with me personally, as I have also felt nervous and unsure about reaching out for help. I wanted to design a platform that feels safe, approachable, and supportive for users.<br><br>
+
+<b>Planning</b><br><br>
+I mapped out the app structure and user flow carefully, prioritizing ease of use and accessibility. Wireframes and sketches were created to visualise the interface, ensuring that every step—from entering feelings to receiving guidance—was clear, intuitive, and engaging. I also considered what types of support would be most helpful, such as helplines, suggestions, and comforting prompts.<br><br>
+
+<b>Development</b><br><br>
+During implementation, I focused on creating an interactive experience that resonates with users. When a user enters their feelings, the app provides empathetic responses that validate their emotions. Additional features, such as helpline information, food recommendations, and motivational messages, were integrated to make users feel they are not alone and provide practical support for their wellbeing.<br><br>
+
+<b>Outcome</b><br><br>
+The final web app is fully functional and visually appealing, offering a supportive environment for users. It demonstrates thoughtful UI/UX design, personalized advice, and meaningful interaction, successfully fulfilling the goal of helping users navigate emotional stress safely and confidently." 
+   data-video="counselling_webpage.mp4">Learn More</a>
+        </div>
+      </div>
+
+      <!-- CARD 2: VIDEO -->
+      <div class="card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="Flower.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">UX</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">Javascript</div>
+            <div class="chip">Design</div>
+          </div>
+          <h3 class="h3">Flower</h3>
+          <p class="desc">I designed a flower animation that shows a flower growing and blooming using digital illustration and animation techniques. The smooth transitions and glowing effects symbolize growth, creativity, and beauty.</p>
+          <a href="#" class="link" data-title="Flower" data-desc="<b>Planning</b><br><br>
+
+During the planning stage, I decided on the animation flow — starting from the stem growing upward, followed by the petals blooming one by one. I also planned the use of light and movement effects to make the animation look natural and smooth. Tools and techniques such as vector design, gradients, and layer organization were outlined before starting the actual development.<br><br>
+<b>Development</b><br><br>
+
+The animation was created using digital illustration and motion techniques. The stems, leaves, and petals were drawn separately, then animated sequentially to simulate real flower growth. Attention was given to timing, symmetry, and glowing particle effects to enhance realism and visual appeal. The final animation combined smooth transitions with a soft lighting effect.<br><br>
+
+<b>Development</b><br><br>
+
+During the development stage, I created the flower animation using digital illustration and motion design techniques. Each element—stems, leaves, and petals—was drawn separately and animated in sequence to simulate natural growth. Careful attention was given to the timing of movements, smooth transitions, and lighting effects to make the animation feel realistic and visually appealing. Additional glow and particle effects were added to enhance the overall aesthetic, resulting in a fluid and elegant animation that effectively captured the beauty of a blooming flower.<br><br>
+
+<b>Outcome</b><br><br>
+
+The final design resulted in a beautiful and captivating flower animation that effectively showcases growth and elegance. The color contrast and smooth motion created a calm and pleasing visual experience. Overall, the project demonstrated creativity, design precision, and animation skills in bringing a simple flower to life." data-video="Flower.mp4">Learn More</a>
+        </div>
+      </div>
+
+      <!-- CARD 3: VIDEO -->
+      <div class="card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="teacherdaycard.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">Dev</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">JS</div>
+          </div>
+          <h3 class="h3">Teacher's Day Card</h3>
+          <p class="desc">I created an interactive Teacher’s Day card using HTML, CSS, and JavaScript to express my gratitude to my lecturer. The card features simple animations, attractive colors, and a heartfelt message, combining creativity and coding to make the greeting more personal and engaging.</p>
+          <a href="#" class="link" data-title="Teacher's Day Card" data-desc="<b>Conceptualization</b><br><br>
+
+The idea was to create an interactive Teacher’s Day card using HTML, CSS, and JavaScript to express gratitude and appreciation toward my lecturer. I wanted the card to be meaningful, visually appealing, and animated to make it feel more personal and heartfelt. The concept focused on blending design and interactivity to deliver a warm and sincere message.<br><br>
+<b>Planning</b><br><br>
+
+In the planning stage, I decided on the card’s layout, colors, and animations. I sketched a simple design that included a greeting message, decorative elements, and a short thank-you note. I also planned to use JavaScript to add interactivity — such as animations or effects when the card is opened or hovered — to make it engaging.<br><br>
+
+<b>Development</b><br><br>
+
+During development, I built the card using HTML for structure, CSS for styling and animations, and JavaScript for interactivity. I carefully designed the layout to ensure it was visually balanced and easy to read. CSS transitions were used to create smooth animations, while JavaScript added dynamic effects like opening motions or glowing text. I tested it across different browsers to ensure responsiveness and a pleasant user experience.<br><br>
+
+<b>Outcome</b><br><br>
+
+The final Teacher’s Day card turned out to be a thoughtful and interactive digital greeting. It successfully conveyed my gratitude through both design and functionality. The combination of colors, animations, and messages created an emotional and engaging experience, showing appreciation for my lecturer in a creative, modern way." data-video="teacherdaycard.mp4">Learn More</a>
+        </div>
+      </div>
+
+      <!-- CARD 4: IMAGE -->
+      <div class="card hero-card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="Book_portfolio.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">Javascript</div>
+          </div>
+          <h3 class="h3">E-Book Portfolio</h3>
+          <p class="desc">I created an interactive book portfolio with page-flip animation using HTML, CSS, and JavaScript. Each page can be flipped smoothly like a real book, showcasing my projects in an engaging and creative way that leaves a strong visual impression.</p>
+          <a href="#" class="link" data-title="Book Portfolio" data-desc="<b>Conceptualization:</b><br><br>
+
+The idea was to create a digital portfolio that mimics the experience of flipping through a real book. By integrating interactivity and animation, the goal was to present projects in a visually engaging and memorable way, making it stand out from standard web portfolios. The focus was on smooth page transitions, clear project organization, and a creative, immersive user experience.<br><br>
+
+<b>Planning:</b><br><br>
+
+Decide the number of pages and structure of content (e.g., project descriptions, images, links).
+
+Choose the technology stack: HTML for structure, CSS for styling and animations, JavaScript for page-flipping interactivity.
+
+Plan user interactions: click or drag to flip pages, navigation buttons, responsive design for different screen sizes.
+
+Sketch layouts and transitions to ensure the design flows naturally like a real book.<br><br>
+
+<b>Development</b><br><br>:
+
+Used HTML to create the book container and individual pages.
+
+Applied CSS for styling, layout, and smooth page-flip animations (transform, perspective, transition).
+
+Implemented JavaScript to handle page flipping logic, track the current page, and respond to user interactions.
+
+Ensured responsiveness and tested across devices for consistent experience.<br><br>
+
+<b>Outcome:</b><br><br>
+
+A fully interactive digital book portfolio with realistic page-flipping animations.
+
+Projects are showcased in a visually appealing, creative, and intuitive format.
+
+Users can easily navigate through pages, leaving a strong impression of creativity and technical skill.
+
+The portfolio demonstrates both design and development capabilities, effectively blending aesthetics with functionality." data-video="Book_portfolio.mp4">Learn More</a>
+        </div>
+      </div>
+      <!-- CARD 5: IMAGE -->
+      <div class="card hero-card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="Online_supermarket.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">CSS</div>
+            <div class="chip">Node.js</div>
+          </div>
+          <h3 class="h3">Online Supermarket</h3>
+          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
+          <a href="#" class="link" data-title="Online Supermarket" data-desc="<b>Conceptualization:</b><br><br>
+The goal was to create an engaging and user-friendly online supermarket with a cute, playful aesthetic. The design emphasizes colorful visuals, appealing icons, and a cheerful interface to make shopping online fun and memorable, especially for younger audiences or casual users.<br><br>
+
+<b>Planning</b><br><br>:
+
+Define the key pages: homepage, product listings, product details, cart, and checkout.
+
+Decide on features: product browsing, add-to-cart functionality, and responsive design.
+
+Choose a technology stack: HTML for structure, CSS for styling (cute design elements), and JavaScript for interactivity (cart management, dynamic updates).<br><br>
+
+<b>Development:</b><br><br>
+
+Built the website structure using HTML, including sections for categories, products, and cart.
+
+Styled the interface with CSS, adding cute illustrations, pastel colors, and playful fonts.
+
+Used JavaScript to handle interactivity, such as adding products to the cart, updating quantities, and displaying totals dynamically.
+
+Tested responsiveness and animations to ensure a smooth and enjoyable user experience.<br><br>
+
+<b>Outcome:</b><br><br>
+
+A fully functional, visually appealing online supermarket with a charming and cute aesthetic.
+
+Users can browse products, manage their cart, and navigate easily through the website.
+
+The project demonstrates creativity in design, combined with technical skills in front-end development.
+
+Leaves a memorable impression through both interactivity and playful visual design.<br><br>
+
+Sketch wireframes and plan color palette, typography, and iconography to ensure a cohesive cute theme." data-video="Online_supermarket.mp4">Learn More</a>
+        </div>
+      </div>
+
+       <!-- CARD 6: VIDEO -->
+      <div class="card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="virtualloveletter.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">Dev</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">JS</div>
+          </div>
+          <h3 class="h3">Virtual Love Letter for friend</h3>
+          <p class="desc">An interactive digital love letter for a sick friend, featuring gentle animations, soft colors, and personalized messages to convey care and encouragement. This project combines creativity and web development skills to create a touching, memorable experience.</p>
+          <a href="#" class="link" data-title="Virtual Love Letter" data-desc="<b>Conceptualization:</b><br><br>
+The idea was to create a heartfelt virtual love letter to a friend who is unwell. The project aims to convey care, encouragement, and warmth digitally, using interactive and visually appealing elements to make the message more personal and memorable.<br><br>
+
+<b>Planning:</b><br><br>
+
+Decide the format: digital card, interactive webpage, or animation.
+
+Choose features: animations, heartwarming visuals, personalized messages, and possibly background music.
+
+Plan the design: soft colors, gentle transitions, and comforting visuals that evoke care and positivity.
+
+Determine technology stack: HTML for structure, CSS for styling/animations, JavaScript for interactivity<br><br>
+
+<b>Development:</b><br><br>
+
+Built the structure using HTML, creating sections for the letter, visuals, and interactive elements.
+
+Styled with CSS, using soft colors, smooth animations, and gentle transitions to enhance emotional impact.
+
+Added JavaScript interactivity, like clickable hearts, animated text, or subtle surprise effects, to make the letter engaging.
+
+Tested for smooth performance and responsiveness on different devices.<br><br>
+
+<b>Outcome:</b><br><br>
+
+A warm and interactive virtual love letter that delivers a heartfelt message to the friend.
+
+Engaging animations and personalized design make the experience touching and memorable.
+
+Demonstrates creativity, empathy, and technical skills in web development." data-video="virtualloveletter.mp4">Learn More</a>
+        </div>
+      </div>
+      <div class="card hero-card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="KPOP_website.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">HTML</div>
+            <div class="chip">CSS</div>
+            <div class="chip">Javascript</div>
+          </div>
+          <h3 class="h3">KPOP Website</h3>
+          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
+          <a href="#" class="link" data-title="KPOP Website" data-desc="<b>Conceptualization:</b><br><br>
+The website was designed to engage K-pop fans through quizzes that test their knowledge and fandom. It also keeps fans updated with the latest comebacks of their favorite groups, making the site both interactive and informative.<br><br>
+<b>Planning</b><br><br>:
+
+Define features: K-pop quizzes, leaderboard or scoring, and a dropdown menu for latest group comebacks.
+
+Plan content: questions, correct answers, and latest comeback updates.
+
+Decide technology stack: HTML for structure, CSS for styling, JavaScript for quiz logic, dropdown interactivity, and dynamic updates.
+
+Design a visually appealing layout with fan-centric colors and images.<br><br>
+
+<b>Development:</b><br><br>
+
+Created the website structure with HTML, including quiz sections and menu.
+
+Styled with CSS for an engaging, colorful, fan-friendly interface.
+
+Implemented JavaScript for interactive quizzes, answer validation, scoring, and dropdown updates for the latest K-pop comebacks.
+
+Tested responsiveness and smooth functionality across devices.<br><br>
+
+<b>Outcome:</b><br><br>
+
+An interactive K-pop fan website that tests knowledge with quizzes and keeps fans updated with latest group comebacks.
+
+Engaging visuals and dynamic features create an immersive fan experience.
+
+Showcases both creativity and front-end web development skills." data-video="KPOP_website.mp4">Learn More</a>
+        </div>
+      </div>
+
+      
+  </div>
+
+  <!-- MODAL -->
+  <!-- MODAL -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle">Project Title</h2>
+
+    <!-- Video first -->
+    <video id="modalVideo" controls autoplay muted playsinline>
+      <source id="modalVideoSource" src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Description below video -->
+    <p id="modalDesc">Project description here.</p>
+  </div>
+</div>
+
+
+
+ <a href="sixth.html">
+  <button class="next-btn">Next →</button>
+</a>
+
+  
+
+ 
+
+<script>
+const modal = document.getElementById("myModal");
+const modalVideo = document.getElementById("modalVideo");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+const close = document.querySelector(".close");
+
+// Open modal
+function openModal(src, title, desc) {
+  modal.classList.add("active");
+  modalTitle.textContent = title;
+  modalDesc.innerHTML = desc;
+
+  const modalSource = document.getElementById("modalVideoSource");
+  modalSource.src = src;
+
+  // Load and play video
+  modalVideo.load();
+  modalVideo.muted = true; // required for autoplay in most browsers
+  modalVideo.play().catch(err => {
+    console.log("Autoplay blocked:", err);
+  });
+}
+
+// Close modal
+close.addEventListener("click", () => {
+  modal.classList.remove("active");
+  modalVideo.pause();
+  modalVideo.currentTime = 0;
+  // Do NOT clear the src; leave it for the next open
+});
+
+// Handle card clicks
+document.querySelectorAll(".link").forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    const src = link.dataset.video;
+    const title = link.dataset.title;
+    const desc = link.dataset.desc;
+    if (src) openModal(src, title, desc);
+  });
+});
+</script>
+
+
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+
+</html>

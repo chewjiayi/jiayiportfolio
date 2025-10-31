@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recent Work — Aesthetic Grid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #fff6f8;
+      --bg2: #fffaf6;
+      --accent: #ff557a;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: #0f172a;
+      padding: 48px 20px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 28px
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 34px
+    }
+
+    .title .spark {
+      font-size: 22px;
+      margin-top: -4px
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.45;
+      font-weight: 400
+    }
+
+    /* decorative corner shapes */
+    .decor {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 48px;
+      filter: blur(28px);
+      opacity: 0.12;
+    }
+
+    .d1 {
+      background: linear-gradient(135deg, #ffdbe6, #ffd0dd);
+      left: -40px;
+      top: -20px
+    }
+
+    .d2 {
+      background: linear-gradient(135deg, #dfe7ff, #e6f7ff);
+      right: -40px;
+      bottom: -80px
+    }
+
+    /* grid */
+    .grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media(min-width:640px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(min-width:1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr)
+      }
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--card-bg), #fff);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .28s cubic-bezier(.2, .9, .3, 1), box-shadow .28s;
+      position: relative;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 16px 44px rgba(16, 24, 40, 0.12);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb-wrap::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      box-shadow: inset 0 -40px 80px rgba(15, 23, 42, 0.04);
+      pointer-events: none;
+    }
+
+    /* Thumbnail images adapt to both vertical & horizontal */
+    .thumbnail {
+      width: 100%;
+      height: auto;
+      max-height: 300px;
+      object-fit: contain;
+      display: block;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+      background: linear-gradient(135deg, #f6f9ff, #fff6f6);
+    }
+
+    .card-body {
+      padding: 18px 18px 22px
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #fff0f3;
+      color: var(--accent);
+      font-weight: 600;
+      border: 1px solid rgba(255, 85, 122, 0.08)
+    }
+
+    .h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 6px 0;
+      color: #0b1220
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 12px
+    }
+
+    .link {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted)
+    }
+
+    .hero-card {
+      grid-column: span 2
+    }
+
+    @media(min-width:1024px) {
+      .hero-card {
+        grid-column: span 2
+      }
+    }
+
+    .corner {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      height: 42px;
+      width: 42px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255, 85, 122, 0.10), rgba(255, 85, 122, 0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 245, 248, 0.65);
+      backdrop-filter: blur(18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      background: linear-gradient(135deg, #fff8fb, #fff0f6);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(255, 115, 138, 0.25);
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      animation: fadeUp 0.45s ease;
+
+      /* 👇 Add these 3 lines */
+      max-height: 85vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      /* optional aesthetic improvement */
+    }
+
+    @keyframes fadeUp {
+      from {
+        transform: translateY(25px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal h2 {
+      background: linear-gradient(90deg, #ff88b1, #ffa8c5);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 22px;
+      font-size: 24px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .3s;
+    }
+
+    .modal-close:hover {
+      color: var(--accent);
+    }
+
+    /* Modal image adapts to vertical & horizontal */
+    .modal-img {
+      width: auto;
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 0 30px rgba(255, 118, 142, 0.25);
+    }
+
+    /* ===== FLOATING ICONS ===== */
+    .float {
+      position: absolute;
+      font-size: 22px;
+      opacity: 0.25;
+      animation: floaty 6s infinite ease-in-out;
+    }
+
+    .f1 {
+      top: 12%;
+      left: 14%;
+      animation-delay: 0s;
+    }
+
+    .f2 {
+      top: 20%;
+      right: 18%;
+      animation-delay: 2s;
+    }
+
+    .f3 {
+      bottom: 16%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    .next-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #ffb6c1, #ff80ab);
+  color: white;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 40px;
+  font-size: 18px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+  transition: all 0.3s ease;
+  letter-spacing: 1px;
+}
+
+.next-btn:hover {
+  background: linear-gradient(135deg, #ff80ab, #ff4081);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(255, 64, 129, 0.6);
+}
+
+.next-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(255, 64, 129, 0.4);
+}
+
+
+    
+  </style>
+</head>
+
+<body>
+  <div class="decor d1"></div>
+  <div class="decor d2"></div>
+
+  <main class="container">
+    <header class="header">
+      <div class="title"><span class="spark">✨</span>
+        <div>My Recent Work <span style="font-weight:500;color:var(--muted)">(Design)</span></div>
+      </div>
+      <p class="subtitle">A curated selection of illustration and UI projects — playful, calm, and intentionally
+        crafted.</p>
+    </header>
+
+    <section class="grid" aria-label="Projects">
+      <!-- Card 1 -->
+      <article class="card hero-card" aria-labelledby="p1">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="chibiart.png" alt="Chibi illustration preview">
+          <div class="corner">Illu</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">🎨 Illustration</div>
+            <div class="chip" style="background:#eef7ff;color:#2b6cb0;border-color:rgba(59,130,246,0.06)">Vector</div>
+          </div>
+          <h3 id="p1" class="h3">Chibi Art Illustration</h3>
+          <p class="desc">Cute character set with soft shading and playful palette — made in Adobe Illustrator with
+            careful vector detail.</p>
+          <div class="meta">
+            <a class="link" href="#" data-img="chibiart.png" data-title="Chibi Art Illustration"
+              data-desc="<b>Conceptualisation</b>:<br>
+The idea for this project was to design five original characters in a chibi art style, reflecting my personal aesthetic and personality. I wanted the characters to represent my feminine and cute side, as well as my love for adventure and school-life themes. The concept of placing them in a park setting came from my own enjoyment of visiting parks, which I find peaceful and inspiring.<br><br>
+
+<b>Planning</b>:<br>
+Before starting on Adobe Illustrator, I sketched out several character designs on paper to explore different hairstyles, outfits, and expressions. I planned to create five distinct characters that would each showcase a different aspect of my personality while maintaining a cohesive chibi style. I also designed a bright and playful background to complement the characters and enhance the cheerful mood of the scene.<br><br>
+
+<img src='drawing.jpg' style='max-width:100%;border-radius:12px;margin:10px 0;'><br>
+
+<b>Development</b>:<br>
+Using Adobe Illustrator, I began by creating basic shapes and gradually refined the characters with details such as facial expressions, accessories, and clothing folds. At first, the process was challenging because I was not familiar with the software tools. However, through multiple trials and exploration of Illustrator functions such as the Pen Tool, Gradient, and Shape Builder, I became more confident and efficient. After completing the characters, I illustrated the park background using simple geometric forms and vibrant colors to tie the composition together.<br><br>
+
+<img src='illustration.jpg' style='max-width:100%;border-radius:12px;margin:10px 0;'><br>
+
+<b>Conclusion</b>:<br>This project allowed me to improve my digital illustration skills, develop a better understanding of vector-based design, and express my personal style through cute, imaginative, and cohesive character art.">
+              View Case Study →
+            </a>
+
+
+            <span>2025 • Personal</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="card" aria-labelledby="p2">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="Digitalbanner.jpg" alt="Vertical Banner">
+          <div class="corner">Ad</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">📢 Banner</div>
+            <div class="chip">Design</div>
+          </div>
+          <h3 id="p2" class="h3">Travel Digital Banner</h3>
+          <p class="desc">This digital banner was created to promote Travellly, a fictional travel company offering
+            customized travel packages.
+            visuals.</p>
+          <div class="meta">
+            <a class="link" href="#" data-img="Digitalbanner.jpg" data-title="Travel Digital Banner"
+              data-desc="<b>Conceptualisation</b>:<br>
+For this project, I wanted to create an aesthetic and eye-catching digital banner to promote Travellly — a fictional travel company that offers customized travel packages. My main goal was to design something that visually attracts people around the world and encourages them to explore new destinations. The concept was to convey a sense of adventure, wanderlust, and trust, using bright gradients and well-known global landmarks to represent worldwide travel possibilities.
+<br><br>
+<b>Planning</b>:<br>
+Before starting the design, I researched different travel advertisements to study their layout, typography, and use of color. I decided to use a modern gradient background that transitions smoothly between blue and orange to symbolize both the sky and sunset — a metaphor for journeys and exploration. The globe was chosen as the central visual element, surrounded by famous landmarks such as the Eiffel Tower, Statue of Liberty, and Merlion to emphasize international travel. I also planned to include key call-to-action elements like “Book Now” and company contact info for realism and balance.
+<br><br>
+<b>Development</b>:<br>
+Using Adobe Illustrator and Photoshop, I started by building the background gradient and arranging the globe composition. I used a combination of clipping masks and shadow effects to make the landmarks appear three-dimensional. The text was styled with elegant fonts to maintain a travel-themed aesthetic — “Travellly” in bold for brand emphasis and “Your Travel Partner” in a cursive style for a friendly, personal touch. The final design balances vibrancy, clarity, and professionalism, effectively drawing attention to the main message while maintaining visual harmony.">
+              View Case Study →
+            </a>
+            <span>Jiayi • 2025</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="card" aria-labelledby="p3">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="ig grid.jpg" alt="grid of travel posts">
+          <div class="corner">Grid</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">📱 Social</div>
+            <div class="chip">Design</div>
+          </div>
+          <h3 id="p3" class="h3">Travel Instagram Grid</h3>
+          <p class="desc">Cohesive 9-post layout for a travel brand — color harmony and composition optimized for feeds.
+          </p>
+          <div class="meta">
+            <a class="link" href="#" data-img="ig grid.jpg" data-title="Travel Instagram Grid"
+              data-desc="<b>Conceptualisation</b>:<br>
+For this project, I wanted to create an Instagram grid layout to promote Travellly, my fictional travel company. The goal was to design something visually engaging and cohesive that could attract potential travelers through a social media platform. I envisioned the grid as a creative storytelling piece — each panel highlighting different travel destinations like Iceland, Maldives, China, and Japan, while maintaining a consistent color palette and tone. The concept represents my creativity and passion for design while connecting it to the idea of exploration and wanderlust.
+<br><br>
+<b>Planning</b>:<br>
+I began by sketching different layout ideas to visualize how each square would connect harmoniously when viewed as a full grid. I decided to place a central image of a woman popping out of the background, symbolizing excitement and curiosity for new adventures. Around her, I added destination images, travel quotes, and call-to-action phrases such as “Explore More. Experience Travelling.” The dotted elements, maps, and country names were all hand-drawn by me to give the design a personal and artistic touch.
+<br><br>
+<b>Development</b>:<br>
+Using Adobe Illustrator and Photoshop, I arranged the grid composition and ensured the alignment worked seamlessly when divided into nine posts. I applied soft blue tones and minimalist vector shapes to maintain a clean, modern aesthetic. Each photo frame and dot pattern was custom-drawn to create consistency across the layout. The final piece successfully combines aesthetic design and promotional purpose, showcasing my ability to blend creativity with branding and digital marketing concepts.">
+              View Case Study →
+            </a>
+            <span>Brand • 2024</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 4 -->
+      <article class="card" aria-labelledby="p4">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="portfolio (3).png" alt="dark portfolio UI">
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">🖥️ UI Design</div>
+          </div>
+          <h3 id="p4" class="h3">Portfolio UI Design</h3>
+          <p class="desc">A modern, dark-themed UI for showcasing work — emphasis on imagery and a calm browsing rhythm.
+          </p>
+          <div class="meta">
+            <a class="link" href="#" data-img="portfolio (3).png" data-title="Portfolio UI Design" data-desc="
+   <b>Conceptualisation</b><br>
+   The concept of this portfolio revolves around a futuristic digital aesthetic, inspired by the world of technology, coding, and neon cityscapes. As an IT student and creative designer, my goal was to merge both technical precision and artistic flair into a single experience — showcasing my identity through visuals, interactivity, and structure.<br><br>
+   I wanted the portfolio to represent me not just as a designer, but as a creator who codes. The dark background with glowing pink and purple tones was chosen to evoke a sci-fi and digital atmosphere, symbolising innovation, mystery, and creativity.<br><br>
+   The main inspiration came from modern tech dashboards, holographic interfaces, and cyberpunk visuals. I also explored how futuristic UI elements can remain functional and user-friendly, ensuring balance between form and usability.<br><br>
+   <img src='inspirationforport.png' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+  <img src='inspirationforport2.png' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+
+   <b>Planning</b><br>
+   The planning stage began with wireframe sketches, drawn by hand to outline the site’s overall structure and content flow. These sketches helped visualise the placement of key elements — header navigation, project sections, skill highlights, and the contact form.<br><br>
+   After refining the sketches, I moved into Adobe Illustrator, where I digitally drew each section, creating clean lines, layout compositions, and custom icons. This process allowed me to control the aesthetic in detail, such as the glowing effects, button styles, and geometric compositions.<br><br>
+  <img src='portfoliohomeandaboutmesection.jpg' style='max-width:100%;border-radius:12px;margin:10px 0;'><br>
+  <img src='portfolioprojectandcontact.jpg' style='max-width:100%;border-radius:12px;margin:10px 0;'><br>
+  
+   
+">
+              View Case Study →
+            </a>
+
+            <span>UI • 2025</span>
+          </div>
+        </div>
+      </article>
+      <!-- Card 5-->
+      <article class="card" aria-labelledby="p4">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="iggridGA.jpg" alt="dark portfolio UI">
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">🖥️ UI Design</div>
+          </div>
+          <h3 id="p4" class="h3">Personal IG Grid</h3>
+          <p class="desc">A visually futuristic showcase of my creative workflow, illustrating how design and technology
+            merge seamlessly from concept to final execution.
+          <div class="meta">
+            <a class="link" href="#" data-img="iggridGA.jpg" data-title="Personal IG Grid"
+              data-desc="<b>Conceptualisation</b><br>
+
+The concept behind My Creative Flow was to visually express my personal design and coding journey — how creativity and logic merge together in my process as a designer with an IT background. I wanted to capture the rhythm of my workflow through a futuristic and engaging visual that embodies both structure and imagination. Inspired by digital interfaces, holographic visuals, and neon lighting, the design reflects the synergy between technology and creativity. The circular and triangular compositions were chosen to represent continuous movement and progress, symbolising how each phase of design flows naturally into the next. The use of dark backgrounds with glowing highlights reinforces a high-tech, futuristic aesthetic, aligning with my identity as a creator who thrives in both design and technology.<br><br>
+
+<b>Planning</b>:<br>
+
+During the planning stage, I began with wireframe sketches to experiment with how I could illustrate my creative process in a way that felt dynamic and visually balanced. Rather than following a conventional linear format, I explored geometric layouts to bring a sense of energy and motion into the composition. After finalising the flow, I refined the visual structure in Adobe Illustrator, carefully aligning shapes, text, and imagery to maintain consistency and rhythm throughout the piece. Each design choice was made to guide the viewer’s eye smoothly across the stages of my creative process. The color scheme of neon blue, pink, and purple was selected to remain cohesive with the overall portfolio theme, evoking both creativity and innovation while staying visually consistent with my futuristic direction.<br><br>
+
+<b>Development</b>:<br>
+
+In the development stage, I translated my concept and digital sketches into a polished visual composition using Adobe Illustrator and Photoshop. The focus was on blending clarity and aesthetics — ensuring each step of my process was clearly represented while maintaining visual depth and sophistication. The “Creative Code: Step-by-Step” section was structured to show the logical flow from research to final output, using glowing effects and gradient layers to enhance visual hierarchy. Each segment represents a real part of my workflow: user research, layout design, UI styling, and handoff to development. Through the careful layering of light, form, and typography, the final design successfully communicates how my creative and technical sides come together — transforming abstract ideas into a cohesive and visually striking representation of my creative journey.">
+              View Case Study →
+            </a>
+            <span>UX • 2025</span>
+          </div>
+        </div>
+      </article>
+      <!-- Card 6-->
+      <article class="card" aria-labelledby="p4">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="fashion.png" alt="dark portfolio UI">
+          <div class="corner">UI</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">🖥️ UI Design</div>
+          </div>
+          <h3 id="p4" class="h3">Fashion E-Commerce UI Webpage</h3>
+          <p class="desc">A feminine, user-centered e-commerce design created in Visily, combining fashion elegance with seamless shopping flow for a modern online experience.
+          </p>
+          <div class="meta">
+            <a class="link" href="#" data-img="fashion.png" data-title="Fashion E-Commerce UI Webpage"
+  data-desc="<b>Conceptualisation</b><br>
+  Velora Apparelanding is my first-ever UI design project created using Visily, focusing on a fashion-based online store experience. The main idea was to design an elegant yet functional shopping platform that helps users — especially teens and young adults — find the perfect formal gown and matching accessories effortlessly.<br><br>
+
+  The concept was inspired by the frustration many users face when shopping for formal attire online, particularly the difficulty of matching accessories with dresses. I wanted to create a design that solves this issue by providing visual recommendations that complete the look.<br><br>
+
+  For the overall style direction, I explored two initial mood boards — one featuring bold and strong color schemes, and another using soft, feminine tones. I eventually chose the feminine palette because it aligns more closely with my personal design preference and the nature of the product. The pinkish and lavender hues reflect a sense of beauty, delicacy, and elegance, which suits the brand’s identity and target audience. The design concept aimed to make the shopping experience not only visually appealing but also emotionally resonant with those who appreciate graceful and aesthetic styles.<br><br>
+
+  <b>Planning</b><br>
+  In the planning stage, I began by mapping out the key pages required for a complete e-commerce experience — including Homepage, About Us, Product Listing, Product Details, and Checkout. I sketched the user flow to ensure that navigation remained smooth and intuitive across all screens.<br><br>
+
+  Using Visily, I developed wireframes that helped define the structure and hierarchy of the site before finalizing the visual design. My focus was to create a layout that felt luxurious yet approachable, highlighting the product imagery as the main focal point. The interface also integrates storytelling elements, such as the brand’s origin and design philosophy, to enhance engagement and brand personality.<br><br>
+
+  The color palette of soft lavender, pastel pink, and subtle beige tones was consistently applied across all pages, reflecting the elegance of the brand. Typography choices and spacing were refined to give a professional yet gentle impression, enhancing readability and visual comfort.<br><br>
+
+  <img src='fashionmoodboard.png' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+
+  <b>Development</b><br>
+  During the development phase, I translated my detailed UI layouts into high-fidelity mockups within Visily. Each screen was carefully aligned to ensure a cohesive visual flow and consistent user experience. The product pages were designed to include high-quality images, pricing details, and “Get the Look” accessory recommendations, allowing users to visualize complete outfits effortlessly.<br><br>
+
+  Special attention was given to the Product Details and Checkout sections to make the process seamless and user-friendly. The footer and navigation bars were designed consistently across all pages to maintain structural balance and improve accessibility.<br><br>
+
+  This project allowed me to understand the end-to-end process of creating a fashion e-commerce website — from conceptual thinking to user-centered design. The final outcome is a feminine, modern, and elegant shopping experience that reflects my aesthetic direction and my ability to design thoughtfully structured user interfaces.<br><br>
+
+  <img src='fashioncheckout.jpg' style='max-width:90%;border-radius:12px;margin:10px 0;'><br>
+  <img src='fashionlooks.jpg' style='max-width:90%;border-radius:12px;margin:10px 0;'><br>
+
+  <a href='https://app.visily.ai/projects/6b18e7a7-c23d-42c7-a09a-7a004119e4c2/boards/1467473' target='_blank' style='
+    display:inline-block;
+    margin-top:16px;
+    background:#ff557a;
+    color:#fff;
+    font-weight:600;
+    padding:10px 22px;
+    border-radius:10px;
+    text-decoration:none;
+    box-shadow:0 4px 10px rgba(255,85,122,0.3);
+    transition:background 0.3s;
+  '>View More</a>">
+  View Case Study →
+  </a>
+            </a>
+            <span>UX • 2025</span>
+          </div>
+        </div>
+      </article>
+      <article class="card hero-card" aria-labelledby="p1">
+        <div class="thumb-wrap">
+          <img class="thumbnail" src="typography.jpg" alt="Chibi illustration preview">
+          <div class="corner">Typography</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">Typography</div>
+            <div class="chip" style="background:#eef7ff;color:#2b6cb0;border-color:rgba(59,130,246,0.06)">Vector</div>
+          </div>
+          <h3 id="p1" class="h3">KirbyCraft: Typography in Motion</h3>
+          <p class="desc">Cute character set with soft shading and playful palette — made in Adobe Illustrator with
+            careful vector detail.</p>
+          <div class="meta">
+            <a class="link" href="#" data-img="typography.jpg" data-title="KirbyCraft: Typography in Motion"
+              data-desc="<b>Conceptualization</b> <br>I wanted to create a playful yet meaningful design that combines pop culture with the identity of a web designer. Using Kirby as the main character was a deliberate choice because of its friendly and recognizable appearance. My idea was to represent different types of web designers through color variations and to use typography as part of the character design. The goal was to make the concept of web design more approachable and visually engaging, while also showcasing creativity and personality through familiar visuals.<br><br>
+                         <b>Planning </b> <br>During the planning stage, I focused on how to visually balance the characters and integrate typography in a creative way. I decided to use Adobe Illustrator for its flexibility with vector shapes and text manipulation. Each Kirby-inspired character was assigned a unique color scheme to represent diversity in design styles. I also planned to incorporate the word “WEB DESIGNER” into the limbs of each character, making it part of their identity. The background was kept simple with grassy patches to maintain focus on the characters and their design elements.<br><br>
+                         <b>Development</b> <br> In the development phase, I started by sketching the layout and positioning of each character. I then built the characters in Illustrator using basic shapes and customized their colors and patterns. The typography was carefully warped and placed on the limbs to ensure it was readable but still felt like part of the illustration. I refined the details, adjusted spacing, and added shadows to give the design more depth. The final artwork is a vibrant and fun representation of web designers, blending illustration and typography to express creativity and individuality.">
+              View Case Study →
+            </a>
+            <span>2025 • Personal</span>
+          </div>
+        </div>
+      </article>
+
+    </section>
+    <a href="sixth.html">
+  <button class="next-btn">Next →</button>
+</a>
+
+   
+</a>
+
+  </main>
+
+  <!-- ===== MODAL ===== -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <div class="float f1">✨</div>
+      <div class="float f2">💫</div>
+      <div class="float f3">🌸</div>
+      <span class="modal-close" id="close">&times;</span>
+      <img id="modalImg" class="modal-img" src="" alt="">
+      <h2 id="modalTitle"></h2>
+      <p id="modalDesc"></p>
+      <a id="modalLive" class="view-live-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:none;">View Live →</a>
+      
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalDesc = document.getElementById("modalDesc");
+    const close = document.getElementById("close");
+
+    // Open modal on click
+    document.querySelectorAll(".link").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        modalImg.src = link.dataset.img;
+        modalTitle.textContent = link.dataset.title;
+        modalDesc.innerHTML = link.dataset.desc;
+
+        modal.classList.add("active");
+      });
+    });
+
+    // Close modal when clicking X
+    close.addEventListener("click", () => modal.classList.remove("active"));
+
+    // Close modal when clicking outside content
+    modal.addEventListener("click", e => {
+      if (e.target === modal) modal.classList.remove("active");
+    });
+  </script>
+
+</body>
+
+</html>

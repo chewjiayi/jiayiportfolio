@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Room</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        font-family: "Poppins", sans-serif;
+        background: #cce6ff;
+        overflow: hidden;
+        cursor: none;
+    }
+    .cursor {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      background: url('cursor.png') no-repeat center / contain;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease, filter 0.2s ease;
+      z-index: 9999;
+      filter: drop-shadow(0 0 10px rgba(255, 200, 255, 0.7));
+    }
+
+    /* Glow animation when hovering over clickable elements */
+    .cursor.active {
+      transform: translate(-50%, -50%) scale(1.2);
+      filter: drop-shadow(0 0 20px rgba(255, 150, 255, 1));
+    }
+    .container { position: relative; width: 100vw; height: 100vh; }
+    .background-img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 0; }
+    .character, .speech-bubble { position: absolute; z-index: 2; }
+    .character { left: 3%; bottom: 3%; width: 300px; animation: moveright 3s forwards ease-in-out; }
+    .speech-bubble { bottom: 300px; left: -100px; width: 400px; animation: moveUpLeft 3s forwards; }
+
+    @keyframes moveright { from { transform: translateX(0); } to { transform: translateX(20px); } }
+    @keyframes moveUpLeft { 0% { bottom: 50px; left: 50%; } 100% { bottom: 290px; left: 17%; } }
+
+    .object { position: absolute; cursor: pointer; z-index: 3; transition: transform 0.3s, box-shadow 0.3s; }
+
+    #plant { left: 48%; top: 45%; width: 50px; height: 50px; background: #6a6a6a; border-radius: 5px; transform: translate(-50%, -50%); }
+    #book { left: 10%; top: 30%; width: 50px; height: 50px; background: #ffb703; border-radius: 3px; transform: translate(-50%, -50%); }
+    #drawer { left: 79%; top: 70%; width: 50px; height: 50px; background: #7f4e2b; border-radius: 3px; transform: translate(-50%, -50%); }
+    #ocean { left: 60%; top: 25%; width: 50px; height: 50px; background: #17138b; border-radius: 3px; transform: translate(-50%, -50%); }
+    #books { left: 8%; top: 15%; width: 50px; height: 50px; background: #17820f; border-radius: 3px; transform: translate(-50%, -50%); }
+    #chairs { left: 50%; top: 65%; width: 50px; height: 50px; background: #c211a2; border-radius: 3px; transform: translate(-50%, -50%); }
+    #laptop { left: 63.4%; top: 41.1%; width: 172px; height: 88px; background: #515050; border-radius: 1px; transform: translate(-50%, -50%); display:flex; align-items:center; font-size:10px;justify-content:center; color:white; font-weight:bold;white-space: nowrap }
+
+    #tooltip { position: absolute; padding: 8px 12px; background: rgba(154,6,73,0.9); color:#fff; border-radius:5px; pointer-events:none; display:none; z-index:4; font-size:14px; white-space: nowrap; transition: opacity 0.2s; }
+</style>
+</head>
+
+<body>
+    <div class="cursor"></div>
+<div class="container">
+    <img src="secondpicforsecondhtml.jpg" alt="Study Room" class="background-img">
+    <img src="character.png" alt="character" class="character">
+    <img src="thirdspeechbox.png" alt="speech bubble" class="speech-bubble">
+
+    <audio id="bgMusic" src="peacefulmusic.mp3" loop autoplay></audio>
+    <audio id="voiceOver" src="secondvoiceover.mp3"></audio>
+
+    <div class="object" id="plant" data-desc="These plants remind me that growth takes time, care, and patience
+                                              —just like my own journey."></div>
+    <div class="object" id="book" data-desc="Each picture frame holds a memory of my journey,
+                                             a reminder of my resilience, and a reflection of who I am
+                                             —how I’ve grown from a shy girl into an outgoing, confident person."></div>
+    <div class="object" id="drawer" data-desc="Each neatly organized drawer holds memories 
+                                               of my journey, reflecting the moments and 
+                                               experiences that shaped me"></div>
+    <div class="object" id="ocean" data-desc="The ocean calms my mind and reminds me of the bigger purpose in life. 
+                                              Whenever I look at it, I reflect on my journey and think about my future career paths 
+                                              — becoming a UI/UX Designer or an IT Engineer."></div>
+    <div class="object" id="books" data-desc="I enjoy reading to relax whenever I’m free or stressed.
+                                             From Common ICT to my Diploma in Digital Design & Development,
+                                              I’ve completed many projects and earned numerous certificates 
+                                              — each book here reflects that journey."></div>
+    <div class="object" id="chairs" data-desc="This chair has witnessed late nights, hard work, and moments of growth"></div>
+
+    <div class="object" id="laptop"> Hover 3 objects → Laptop unlock
+    </div>
+    <div id="tooltip"></div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    const bgMusic = document.getElementById('bgMusic');
+    const voiceover = document.getElementById('voiceOver');
+    if (sessionStorage.getItem('playAudio') === 'true') {
+        bgMusic.volume = 0.2;
+        voiceover.volume = 1.0;
+        bgMusic.play().catch(() => console.log('Autoplay blocked'));
+        voiceover.play().catch(() => console.log('Autoplay blocked'));
+        sessionStorage.removeItem('playAudio');
+    }
+});
+
+
+const tooltip = document.getElementById('tooltip');
+const laptop = document.getElementById('laptop');
+let hoveredObjects = new Set(); // store unique hovered object IDs
+const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+document.querySelectorAll('.object').forEach(obj => {
+    if(obj.id !== 'laptop') {
+        obj.addEventListener('mousemove', e => {
+            tooltip.style.left = e.pageX + 15 + 'px';
+            tooltip.style.top = e.pageY + 15 + 'px';
+            tooltip.innerText = obj.dataset.desc;
+            tooltip.style.display = 'block';
+            tooltip.style.opacity = '1';
+        });
+
+        obj.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+            setTimeout(() => { tooltip.style.display = 'none'; }, 200);
+        });
+
+        obj.addEventListener('mouseenter', () => {
+            hoveredObjects.add(obj.id);
+            if (hoveredObjects.size >= 3) {
+                // Glow laptop after 3 different objects hovered
+                laptop.style.boxShadow = '0 0 20px #00f, 0 0 30px #0ff';
+            }
+        });
+        
+    }
+});
+
+// Laptop hover
+laptop.addEventListener('mouseenter', () => {
+    if (hoveredObjects.size >= 3) {
+        laptop.style.transform = 'translate(-50%, -50%) scale(1.05)';
+    }
+});
+laptop.addEventListener('mouseleave', () => {
+    laptop.style.transform = 'translate(-50%, -50%) scale(1)';
+});
+
+// Laptop click
+laptop.addEventListener('click', () => {
+  if (hoveredObjects.size < 3) return; // not unlocked yet
+
+  // Set flag so next page knows to play voiceover
+  sessionStorage.setItem('playAudio', 'true');
+
+  // Go to next page immediately
+  window.location.href = 'fourthpage.html';
+});
+
+
+
+
+</script>
+</body>
+</html>

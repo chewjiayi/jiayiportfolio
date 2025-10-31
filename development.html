@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recent Work — Aesthetic Grid</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg1: #fff6f8;
+      --bg2: #fffaf6;
+      --accent: #ff557a;
+      --muted: #6b7280;
+      --card-bg: #ffffff;
+      --shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: #0f172a;
+      padding: 48px 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 28px
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 34px
+    }
+
+    .title .spark {
+      font-size: 22px;
+      margin-top: -4px
+    }
+
+    .subtitle {
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.45;
+      font-weight: 400
+    }
+
+    /* Decorative floating corner shapes */
+    .decor {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 48px;
+      filter: blur(28px);
+      opacity: 0.12;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .d1 {
+      background: linear-gradient(135deg, #ffdbe6, #ffd0dd);
+      left: -40px;
+      top: -20px;
+    }
+
+    .d2 {
+      background: linear-gradient(135deg, #dfe7ff, #e6f7ff);
+      right: -40px;
+      bottom: -80px;
+    }
+
+    @keyframes float {
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-12px) rotate(15deg);
+      }
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 22px;
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media(min-width:640px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(min-width:1024px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    /* Cards */
+    .card {
+      background: linear-gradient(180deg, var(--card-bg), #fff);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .4s cubic-bezier(.2, .9, .3, 1), box-shadow .4s, filter .4s;
+      position: relative;
+      will-change: transform;
+    }
+
+    .card:hover {
+      transform: translateY(-12px) rotateX(2deg) rotateY(2deg);
+      box-shadow: 0 20px 60px rgba(16, 24, 40, 0.18);
+      filter: brightness(1.05);
+    }
+
+    .thumb-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .thumb-wrap::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      box-shadow: inset 0 -40px 80px rgba(15, 23, 42, 0.04);
+      pointer-events: none;
+    }
+
+    /* Gradient overlay on thumbnails */
+    .thumb-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 85, 122, 0.1), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .thumbnail {
+      width: 100%;
+      object-fit: cover;
+      display: block;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+      background: linear-gradient(135deg, #f6f9ff, #fff6f6);
+    }
+
+    /* Staggered card heights */
+    .grid .card:nth-child(odd) .thumbnail {
+      height: 340px;
+    }
+
+    .grid .card:nth-child(even) .thumbnail {
+      height: 280px;
+    }
+
+    .card-body {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+      padding: 20px;
+      border-radius: 0 0 18px 18px;
+      transition: background 0.3s;
+    }
+
+    .card:hover .card-body {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(255, 240, 245, 0.9));
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: #fff0f3;
+      color: var(--accent);
+      font-weight: 600;
+      border: 1px solid rgba(255, 85, 122, 0.08);
+    }
+
+    .h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 6px 0;
+      color: #0b1220;
+    }
+
+    .desc {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .link {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      grid-column: span 2;
+    }
+
+    @media(min-width:1024px) {
+      .hero-card {
+        grid-column: span 2;
+      }
+    }
+
+    .corner {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      height: 42px;
+      width: 42px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, rgba(255, 85, 122, 0.10), rgba(255, 85, 122, 0.06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--accent);
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+    }
+
+    /* Next button */
+    .next-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #ffb6c1, #ff80ab);
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .next-btn:hover {
+      background: linear-gradient(135deg, #ff80ab, #ff4081);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(255, 64, 129, 0.6);
+    }
+
+    .next-btn:active {
+      transform: translateY(1px);
+      box-shadow: 0 4px 10px rgba(255, 64, 129, 0.4);
+    }
+
+    /* Modal */
+    /* Modal base */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(255, 192, 203, 0.3);
+  backdrop-filter: blur(6px);
+}
+
+.modal.active {
+  display: block;
+}
+
+.modal-content {
+  background: white;
+  margin: 80px auto;
+  padding: 24px;
+  border-radius: 16px;
+  width: 80%;
+  max-width: 700px;
+
+  /* Make scrollable */
+  max-height: 80vh;   /* Limit height to 80% of viewport */
+  overflow-y: auto;   /* Enable vertical scroll */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  
+  position: relative;
+  box-shadow: 0 8px 24px rgba(255, 102, 153, 0.25);
+  text-align: center;
+  animation: fadeUpModal 0.6s ease;
+  transform: translateY(30px);
+}
+
+.modal-content h2 {
+  color: #ff6699;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  color: #555;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ff6699;
+}
+
+/* Video fade-up effect */
+
+#modalVideo {
+  width: 100%;       /* Full width of modal */
+  max-width: 100%;   /* Prevent overflow */
+  height: auto;      /* Maintain aspect ratio */
+  max-height: 60vh;  /* Limit height so it doesn't exceed viewport */
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(255, 85, 122, 0.3);
+  margin-top: 20px;
+  display: block;
+}
+
+
+
+#modalVideo.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeUpModal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="decor d1"></div>
+  <div class="decor d2"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="title"><span class="spark">✨</span>
+        <div>My Recent Work <span style="font-weight:500;color:var(--muted)">(Development)</span></div>
+      </div>
+      <p class="subtitle">This stage involves turning ideas and plans into a working product. It includes creating the main features, implementing designs, coding or building assets, integrating tools or effects, and testing components to ensure everything functions as intended.</p>
+    </header>
+
+    <div class="grid">
+      <!-- CARD 1: VIDEO -->
+      <div class="card hero-card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="vrescaperoom.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">Game </div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">Unity</div>
+          </div>
+          <h3 class="h3">VR Escape Room</h3>
+          <p class="desc">The Exit Strategy is a VR escape room game set in a futuristic corporate office where players solve puzzles to escape. Guided by an AI assistant named Omni Mind, players interact with realistic office objects like papers, cubes, and gadgets to uncover clues. The game blends logic, exploration, and storytelling, offering an immersive and engaging VR experience.</p>
+          
+          <a href="#" class="link" data-title="VR Office Escape Room"  data-video="vrescaperoom.mp4" data-desc="<b>Conceptualisation</b><br><br>
+I decided to create this VR escape room game, <i>The Exit Strategy</i>, because I wanted to design something that combines fun, logic, and immersion in a relatable setting — the workplace. Many people experience stress or monotony in office environments, so the idea of “escaping” a corporate office felt both exciting and symbolic. I was inspired by games like <i>I Expect You to Die</i> and <i>Job Simulator</i>, which showed how everyday objects can become part of clever and enjoyable puzzles. My goal was to make a game that allows players to think critically, explore freely, and enjoy a lighthearted adventure in VR.<br><br>
+
+<img src=' Owlchemy Labs - Job Simulator Presskit.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+
+<b>Planning</b><br><br>
+During planning, I outlined the storyline, puzzle flow, and environment layout. I sketched room designs for spaces like the reception area, conference rooms, and cafeteria, ensuring each had unique puzzle elements tied to the narrative. I also planned the voice cues from the AI guide, Omni Mind, to make the experience interactive and supportive. The pacing of puzzles was structured so that new players could easily learn the controls while gradually facing more complex challenges.<br><br>
+<b >Puzzle 1 </b><br><br>
+<img src='diagram1.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b >Puzzle 2 </b><br><br>
+<img src='diagram2.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b> Puzzle 3 </b><br><br>
+<img src='diagram3.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b> Puzzle 4 </b><br><br>
+<img src='diagram4.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b> Puzzle 5 </b><br><br>
+<img src='diagram5.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b>Development</b><br><br>
+In development, I built the VR environment using Unity and implemented core mechanics like teleportation and grabbing. Each puzzle was carefully designed to use realistic office items such as papers, cubes, and food objects, encouraging natural interaction. Voice cues were added to provide hints and maintain immersion. The lighting and textures were fine-tuned to give the office a sleek yet mysterious feel, balancing realism with subtle sci-fi elements. Testing helped me refine object physics and ensure smooth gameplay for new VR users.<br><br>
+
+<b>Outcome</b><br><br>
+The final VR escape room delivers an immersive and engaging experience that challenges players to think, explore, and interact creatively. It successfully captures the atmosphere of a modern corporate office while turning it into an exciting puzzle environment. <i>The Exit Strategy</i> not only highlights my skills in VR development and puzzle design but also demonstrates my ability to create an interactive world that blends storytelling, logic, and fun.<br><br>" 
+   >Learn More</a>
+        </div>
+      </div>
+
+      <!-- CARD 2: VIDEO -->
+      <div class="card">
+        <div class="thumb-wrap">
+          <video class="thumbnail" autoplay muted loop playsinline>
+            <source src="AR Name Card.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+          <div class="corner">Design</div>
+          <div class="corner">Identity</div>
+        </div>
+        <div class="card-body">
+          <div class="chips">
+            <div class="chip">Unity</div>
+            <div class="chip">Adobe Illustrator</div>
+
+          </div>
+          <h3 class="h3">AR Name Card</h3>
+          <p class="desc">This AR Name Card is an interactive and eco-friendly alternative to traditional cards. Featuring a pink, girly theme with a schoolgirl character, glowing snow animation, and background music, it creates a dreamy, memorable experience while showcasing my design and AR development skills.</p>
+          <a href="#" class="link" data-title="AR Name Card" data-desc=" <b>Planning</b><br><br>
+
+During the planning stage, I decided to create an AR Name Card that goes beyond traditional designs by adding interactivity and creativity. I planned to make it eco-friendly and memorable through augmented reality. My concept focused on a girly, pink-themed aesthetic featuring a schoolgirl character that represents me. I also outlined visual elements such as the moon, snow animation, and a dreamy background to create a fairytale-like atmosphere that reflects my personality and design interests.<br><br>
+<b> Name Card Front: </b><br><br>
+<img src='namecardfront.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b>Name Card Back:</b><br><br>
+<img src='namecardback.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b>conceptual Sketch</b><br><br>
+<img src='conceptualsketch.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>
+<b>Development</b><br><br>
+
+During the development stage, I used Unity to design and implement the AR features. I followed a YouTube tutorial to create a snowing animation using particle systems, then customized the snow particles to glow softly and fall slowly for a magical, dreamy look. I also modeled the 3D character myself, adjusting the lighting and colors to match the pink, feminine theme. In addition, I integrated background music to enhance the immersive experience and make the AR Name Card more engaging.<br><br>
+
+<b>Outcome</b><br><br>
+
+The final AR Name Card successfully blends design, animation, and interactivity. It captures my personality through its pink theme, soft snow effects, and schoolgirl character. The background music and glowing snow create a fairytale-like vibe, making the card both visually appealing and memorable. This project demonstrates my creativity, technical skills, and ability to combine aesthetics with AR technology in a unique and eco-friendly way.<br><br ><img src='development.jpg' style='max-width:50%;border-radius:12px;margin:10px 0;'><br>" data-video="AR Name Card.mp4">Learn More</a>
+        
+</div>
+      </div>
+
+      
+      
+
+      
+
+  <!-- MODAL -->
+  <!-- MODAL -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle">Project Title</h2>
+
+    <!-- Video first -->
+    <video id="modalVideo" controls autoplay muted playsinline>
+      <source id="modalVideoSource" src="" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <!-- Description below video -->
+    <p id="modalDesc">Project description here.</p>
+  </div>
+</div>
+
+
+
+ <a href="sixth.html">
+  <button class="next-btn">Next →</button>
+</a>
+
+  
+
+ 
+
+<script>
+const modal = document.getElementById("myModal");
+const modalVideo = document.getElementById("modalVideo");
+const modalTitle = document.getElementById("modalTitle");
+const modalDesc = document.getElementById("modalDesc");
+const close = document.querySelector(".close");
+
+// Open modal
+function openModal(src, title, desc) {
+  modal.classList.add("active");
+  modalTitle.textContent = title;
+  modalDesc.innerHTML = desc;
+
+  const modalSource = document.getElementById("modalVideoSource");
+  modalSource.src = src;
+
+  // Load and play video
+  modalVideo.load();
+  modalVideo.muted = true; // required for autoplay in most browsers
+  modalVideo.play().catch(err => {
+    console.log("Autoplay blocked:", err);
+  });
+}
+
+// Close modal
+close.addEventListener("click", () => {
+  modal.classList.remove("active");
+  modalVideo.pause();
+  modalVideo.currentTime = 0;
+  // Do NOT clear the src; leave it for the next open
+});
+
+// Handle card clicks
+document.querySelectorAll(".link").forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
+    const src = link.dataset.video;
+    const title = link.dataset.title;
+    const desc = link.dataset.desc;
+    if (src) openModal(src, title, desc);
+  });
+});
+</script>
+
+
+
+
+
+
+
+</script>
+
+
+
+
+</body>
+
+</html>

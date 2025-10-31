@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Desk</title>
+  <style>
+    /* Remove default margins and make body full height */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      cursor: none;
+    }
+
+    /* Container fills entire viewport with background image */
+    .container {
+      width: 100%;
+      height: 100%;
+      background-image: url('fourthpic.png');
+      background-size: cover;
+      /* Fill the container */
+      background-position: center;
+      /* Center image */
+      background-repeat: no-repeat;
+      /* Don’t repeat image */
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    /* Note box */
+    .note {
+      background: #fff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      animation: popIn 0.3s ease;
+    }
+
+    .note h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .note p {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .note button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .note button:hover {
+      background: #ff85c1;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background-image: url('fourthpic.png');
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Bigger glowing circle lights */
+    .light {
+      position: absolute;
+      width: 30px;
+      /* bigger size */
+      height: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+
+    .light:hover {
+      transform: scale(2);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 1), 0 0 80px rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+
+      25% {
+        transform: translateY(-15px) translateX(5px);
+      }
+
+      50% {
+        transform: translateY(-10px) translateX(-5px);
+      }
+
+      75% {
+        transform: translateY(-20px) translateX(10px);
+      }
+
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
+
+    /* Tooltip for descriptions */
+    #tooltip {
+      position: absolute;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      border-radius: 8px;
+      pointer-events: none;
+      display: none;
+      font-size: 16px;
+      white-space: nowrap;
+      z-index: 10;
+    }
+
+    /* Fancy interactive lights */
+    .light {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: float 6s ease-in-out infinite alternate;
+    }
+
+    .light:hover {
+      transform: scale(2);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 1), 0 0 80px rgba(255, 255, 255, 0.6);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0) translateX(0);
+      }
+
+      25% {
+        transform: translateY(-15px) translateX(5px);
+      }
+
+      50% {
+        transform: translateY(-10px) translateX(-5px);
+      }
+
+      75% {
+        transform: translateY(-20px) translateX(10px);
+      }
+
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+    }
+
+    /* Tooltip for descriptions */
+    #tooltip {
+      position: absolute;
+      padding: 10px 15px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      border-radius: 8px;
+      pointer-events: none;
+      display: none;
+      font-size: 16px;
+      white-space: nowrap;
+      z-index: 10;
+      transition: opacity 0.2s ease;
+      font-family: 'Arial', sans-serif;
+      /* Tooltip font matches popup */
+    }
+
+    .cursor {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      background: url('cursor.png') no-repeat center / contain;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease, filter 0.2s ease;
+      z-index: 9999;
+      filter: drop-shadow(0 0 10px rgba(255, 200, 255, 0.7));
+    }
+
+    /* Glow animation when hovering over clickable elements */
+    .cursor.active {
+      transform: translate(-50%, -50%) scale(1.2);
+      filter: drop-shadow(0 0 20px rgba(255, 150, 255, 1));
+    }
+
+    .rectangle {
+      position: absolute;
+      bottom: 120px;
+      /* adjust position as needed */
+      right: 770px;
+      /* adjust position as needed */
+      width: 150px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.6);
+      /* white with 60% opacity */
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      /* dark text for contrast */
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+      z-index: 500;
+      /* make sure it's on top */
+    }
+
+    .rectangle:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      background-color: rgba(255, 255, 255, 0.8);
+      /* slightly more opaque on hover */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Fancy interactive lights -->
+    <div class="light" data-desc="A picture frame is me—showing what 
+                                 I want the world to see,
+                                 holding onto the moments I care about, 
+                                 and highlighting what really matters" style="top: 25%; left: 28%;"></div>
+    <div class="light" data-desc="The pencil holder and pencils are me—
+                                  they show that I like being prepared 
+                                  and organized, but also ready to create.
+                                  Each pencil is a new idea or possibility, 
+                                  and even if I make mistakes,
+                                  I can always sharpen my skills 
+                                  and keep going. It’s about growth, 
+                                  creativity, and being ready for 
+                                  whatever comes next." style="top: 60%; left: 65%;"></div>
+    <div class="light" data-desc="A vintage handheld electronic game is me—
+                                  it’s playful, curious, and a little nostalgic. 
+                                  It shows that I enjoy challenges, 
+                                  like to focus on what matters, 
+                                  and treasure the memories and
+                                   experiences that shaped me." style="top: 60%; left: 35%;">
+    </div>
+    <div class="light" data-desc="A poster is me—it’s how I show 
+                                  what I care about and what inspires me. 
+                                  It reflects my style, my creativity, 
+                                  and the ideas or messages that motivate me
+                                  every day. It’s a little window into who I am
+                                  and what I value." style="top: 25%; left: 70%;"></div>
+    <div class="light" data-desc="A lamp is me—it’s 
+                                  my little light 
+                                  of hope in a 
+                                  dim room, especially 
+                                  when I’m overthinking. 
+                                  Even in the darkest moments, 
+                                  it reminds me I can 
+                                  find clarity and keep going." style="top: 38%; left: 80%;"></div>
+    <div class="light" data-desc="That board is me—it’s a reminder that I don’t need 
+                                  to be perfect to do something great. It’s about trying, 
+                                  learning, and growing, even if I make mistakes along the way.
+                                  It’s a nudge to focus on what really matters and to keep going, 
+                                  knowing that effort and impact count more than flawlessness."
+      style="top: 25%; left: 48%;"></div>
+    <div class="light" data-desc="A clock is me—it reminds me 
+                                  that time keeps moving, and so do I. 
+                                  It’s about growth, balance, and making the 
+                                  most of each moment, even when things 
+                                  feel uncertain." style="top: 65%; left: 49%;"></div>
+    <div class="light" data-desc="An apple is me—it’s simple but full of meaning. 
+                                  It reflects my curiosity to keep learning,
+                                   my care for growth and balance, 
+                                   and my reminder to stay true to myself." style="top: 70%; left: 59%;"></div>
+    <div class="light" data-desc="Books are me—they hold knowledge, 
+                                  stories, and growth, just like I do. 
+                                  They reflect my curiosity to keep learning,
+                                  my experiences that shape me, 
+                                  and the depth I carry inside." style="top: 65%; left: 16%;"></div>
+    <div class="light" data-desc="A calculator is me—it shows how I like to 
+                                  solve problems and make sense of things. 
+                                  It’s about breaking challenges down, 
+                                  finding clarity, and always being ready 
+                                  to figure things out step by step." style="top: 79%; left: 15%;"></div>
+
+    <!-- Tooltip -->
+    <div id="tooltip"></div>
+  </div>
+  <div class="cursor"></div>
+  <div class="rectangle" onclick="goToPage()">
+        Click Me
+  </div>
+
+  <!-- Overlay with instruction note -->
+  <div class="overlay" id="instructionOverlay">
+    <div class="note">
+      <h2>Welcome to my Study Desk!</h2>
+      <p>Hover over the items on my study desk to discover more about me. Click the book to go to my About Me page.</p>
+      <button onclick="closeNote()">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Audio files -->
+  <audio id="bgMusic" src="fourthmusic.mp3" loop></audio>
+  <audio id="voiceOver" src="voiceover.mp3"></audio>
+
+  <script>
+    const tooltip = document.getElementById("tooltip");
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+
+    function closeNote() {
+      document.getElementById("instructionOverlay").style.display = "none";
+
+      const bgMusic = document.getElementById("bgMusic");
+      const voiceover = document.getElementById("voiceOver");
+
+      bgMusic.volume = 0.1;
+      voiceover.volume = 1.0;
+
+      bgMusic.play().catch(() => console.log("Music blocked"));
+      voiceover.play().catch(() => console.log("Voiceover blocked"));
+    }
+
+    // Tooltip interaction
+    document.querySelectorAll('.light').forEach(light => {
+      light.addEventListener('mousemove', e => {
+        tooltip.style.left = e.pageX + 15 + 'px';
+        tooltip.style.top = e.pageY + 15 + 'px';
+        tooltip.innerText = light.dataset.desc;
+        tooltip.style.display = 'block';
+        tooltip.style.opacity = '1';
+      });
+
+      light.addEventListener('mouseleave', () => {
+        tooltip.style.opacity = '0';
+        setTimeout(() => {
+          tooltip.style.display = 'none';
+        }, 200);
+      });
+    });
+    
+    function goToPage() {
+      window.location.href = "fifth.html"; // Change to your target HTML page
+    }
+  </script>
+</body>
+
+</html>

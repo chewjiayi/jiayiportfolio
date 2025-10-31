@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clickable Door Portfolio</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #cce6ff;
+      cursor: none;
+      /* fallback background */
+    }
+    .cursor {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      background: url('cursor.png') no-repeat center / contain;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease, filter 0.2s ease;
+      z-index: 9999;
+      filter: drop-shadow(0 0 10px rgba(255, 200, 255, 0.7));
+    }
+
+    /* Glow animation when hovering over clickable elements */
+    .cursor.active {
+      transform: translate(-50%, -50%) scale(1.2);
+      filter: drop-shadow(0 0 20px rgba(255, 150, 255, 1));
+    }
+
+    .container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Background image (zoomed out) */
+    .background-img {
+      width: 100%;
+      /* make image smaller (zoom out) */
+      height: 100%;
+      object-fit: cover;
+
+
+    }
+
+    /* Clickable door area */
+    .door-link {
+      position: absolute;
+      left: 58%;
+      /* adjust to match your door */
+      top: 70%;
+      /* adjust to match your door */
+      width: 6%;
+      /* door width */
+      height: 15%;
+      /* door height */
+      transform: translateX(-50%);
+      cursor: pointer;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0);
+      /* invisible */
+    }
+
+    .door-link:hover {
+      background: rgba(242, 237, 239, 0.532);
+    }
+
+    /* Speech bubble */
+    .character {
+      position: absolute;
+      left: -1%;
+      bottom: 3%;
+      color: black;
+
+      padding: 10px;
+      border-radius: 10px;
+      font-family: "Poppins", sans-serif;
+      text-align: center;
+      width: 300px;
+      animation: moveright 3s forwards ease-in-out;
+
+    }
+
+    @keyframes moveright {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(20px);
+        /* move left (adjust value) */
+      }
+    }
+
+    @keyframes moveUpLeft {
+      0% {
+        bottom: 50px;
+        left: 50%;
+      }
+
+      100% {
+        bottom: 290px;
+        /* stay up */
+        left: 11%;
+        /* move left */
+      }
+    }
+
+    .speech-bubble {
+      position: absolute;
+      bottom: 50px;
+      /* starting position */
+      width: 400px;
+      /* resize as needed */
+      animation: moveUpLeft 3s forwards;
+    }
+  
+  </style>
+  <script>
+
+  </script>
+</head>
+
+<body>
+  <div class="cursor"></div>
+  <div class="container">
+    <!-- Replace with your house image -->
+    <img src="second.png" alt="Pixel House" class="background-img">
+
+    <!-- Clickable door hotspot -->
+    <a href="second.html" class="door-link" title="Enter"></a>
+    <img src="character.png" alt="character" class="character">
+    <img src="speechbubble.png" alt="Speech Bubble" class="speech-bubble">
+    <audio id="bgMusic" src="game.mp3" loop></audio>
+    <audio id="voiceOver" src="firstvoiceover.mp3"></audio>
+
+    <!-- Character speech bubble -->
+
+  </div>
+</body>
+<script>
+  
+  window.addEventListener('DOMContentLoaded', () => {
+    // Only play if user came from index.html
+    if (sessionStorage.getItem('playAudio') === 'true') {
+      document.getElementById('bgMusic').play();
+      document.getElementById('voiceOver').play();
+      sessionStorage.removeItem('playAudio'); // clear flag
+       bgMusic.volume = 0.1;  // 0.0 = mute, 1.0 = max
+
+  // Set voiceover louder
+  voiceover.volume = 1.0; 
+    }
+  });
+  const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+  
+  const door = document.querySelector('.door-link');
+  door.addEventListener('click', () => {
+  sessionStorage.setItem('playAudio', 'true');
+});
+
+
+</script>
+
+
+</html>

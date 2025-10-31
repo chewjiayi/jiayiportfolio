@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fullscreen Video with Pixel Typing Text</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body {
+      cursor: none;
+      /* Hide the default cursor */
+    }
+
+  
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body,
+    html {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 60%;
+      z-index: -1;
+      /* keep video behind */
+    }
+
+    .center-text {
+      position: absolute;
+      top: 28%;
+      /* slightly above center */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-family: 'Press Start 2P', cursive;
+      /* pixel font */
+      font-size: 58px;
+      color: #ff5ca2;
+      /* pink */
+      text-shadow: 3px 3px #5a2d82, 5px 8px #7c1919;
+      /* outline effect */
+      letter-spacing: -2px;
+    }
+
+    .typed-line {
+      border-right: 6px solid #ff5ca2;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 4s steps(30) forwards, cursor 1s step-end infinite alternate;
+    }
+
+    .typed-line.second {
+      animation: typing2 4s steps(30) forwards, cursor 1s step-end infinite alternate;
+      animation-delay: 4.5s;
+    }
+
+    .textbox {
+      position: absolute;
+      bottom: 30%;
+      /* adjust vertical placement */
+      left: 70%;
+      /* adjust horizontal placement */
+      width: 280px;
+      /* resize textbox image */
+      z-index: 10;
+    }
+
+    .textbox p {
+      position: absolute;
+      top: 35%;
+      /* adjust text placement inside box */
+      left: 15%;
+      transform: translate(-50%, -50%);
+      font-family: 'Press Start 2P', cursive;
+      font-size: 16px;
+      color: #5a2d82;
+      text-align: center;
+      width: 200px;
+    }
+
+   .speech-bubble {
+  position: absolute;
+  bottom: 200px;  /* distance from bottom */
+  left: 20%;      /* horizontal placement */
+  transform: translateX(-50%);
+  max-width: 300px;
+  z-index: 20;    /* above video & button */
+}
+
+    .map-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .map-container img {
+      width: 600px;
+      /* adjust size */
+      height: auto;
+      display: block;
+    }
+
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      border: 2px dashed transparent;
+      /* debugging: set to red to see areas */
+    }
+
+    .hotspot:hover {
+      border: 2px dashed yellow;
+      /* highlight when hovering */
+    }
+
+    /* Example positions (you’ll tweak these) */
+    .door {
+      top: 65%;
+      left: 35%;
+      width: 70px;
+      height: 90px;
+    }
+
+    .window1 {
+      top: 20%;
+      left: 40%;
+      width: 60px;
+      height: 60px;
+    }
+
+    .window2 {
+      top: 40%;
+      left: 60%;
+      width: 60px;
+      height: 60px;
+    }
+
+    .flag {
+      top: 10%;
+      left: 75%;
+      width: 50px;
+      height: 50px;
+    }
+    .cursor {
+      position: fixed;
+      width: 64px;
+      height: 64px;
+      background: url('cursor.png') no-repeat center / contain;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: transform 0.1s ease, filter 0.2s ease;
+      z-index: 9999;
+      filter: drop-shadow(0 0 10px rgba(255, 200, 255, 0.7));
+    }
+
+    /* Glow animation when hovering over clickable elements */
+    .cursor.active {
+      transform: translate(-50%, -50%) scale(1.2);
+      filter: drop-shadow(0 0 20px rgba(255, 150, 255, 1));
+    }
+
+
+
+
+
+    @keyframes cursor {
+      50% {
+        border-color: transparent;
+      }
+    }
+
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    @keyframes typing2 {
+      from {
+        width: 0;
+      }
+
+      to {
+        width: 100%;
+      }
+    }
+
+    #link-btn {
+      position: absolute;
+      bottom: 30px;
+      /* distance from bottom */
+      left: 50%;
+      /* center horizontally */
+      transform: translateX(-50%);
+      width: 200px;
+      /* button width */
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    #link-btn img {
+      width: 120%;
+      /* fill the link */
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <video autoplay muted loop>
+    <source src="video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="center-text">
+    <p class="typed-line">WELCOME TO</p>
+    <div style="height:18px"></div>
+    <p class="typed-line second">JIAYI'S PORTFOLIO</p>
+  </div>
+
+  <div class="textbox">
+    <img src="textbox.png" alt="Textbox" style="width:100%;">
+
+  </div>
+  <a href="map.html" id="link-btn">
+    <img src="button.png" alt="Click Here">
+    
+  </a>
+  <div class="cursor"></div>
+
+
+  <img src="secondtextbox.png" alt="Speech Bubble" class="speech-bubble">
+
+</body>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const cursor = document.createElement("div");
+    cursor.classList.add("custom-cursor");
+    document.body.appendChild(cursor);
+
+    const trail = document.createElement("div");
+    trail.classList.add("cursor-trail");
+    document.body.appendChild(trail);
+
+    document.addEventListener("mousemove", (e) => {
+      cursor.style.left = e.pageX + "px";
+      cursor.style.top = e.pageY + "px";
+
+      // Smooth follow for trail
+      trail.animate(
+        {
+          left: e.pageX + "px",
+          top: e.pageY + "px",
+        },
+        { duration: 300, fill: "forwards" }
+      );
+    });
+  });
+  const btn = document.getElementById('link-btn');
+  btn.addEventListener('click', () => {
+    // Store a flag in sessionStorage so map.html knows to play audio
+    sessionStorage.setItem('playAudio', 'true');
+    window.location.href = 'map.html';
+  });
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+</script>
+
+</html>
