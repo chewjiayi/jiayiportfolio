@@ -1,48 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Full Screen Door</title>
-  <style>
-    /* Remove default margin and ensure full height */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unlock Door Reveal</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{width:100%;height:100%;overflow:hidden;background:#000;}
+  body{
+    display:flex;justify-content:center;align-items:center;
+    position:relative;font-family:system-ui;
+  }
 
-    html, body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
+  #door,#opened-door,#key{
+    position:absolute;object-fit:cover;
+    transition:opacity 1s ease, transform 1s ease;
+  }
+  #door{width:100%;height:100%;z-index:1}
 
-    /* Make image fill entire screen */
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: #000;
-    }
+  /* ===== Glowing key ===== */
+  #key{
+    bottom:40px;left:50%;transform:translateX(-50%);
+    width:120px;cursor:grab;z-index:2;user-select:none;
+    transition:transform .3s ease, opacity .3s ease;
+    filter:
+      drop-shadow(0 0 10px rgba(255,215,100,.9))
+      drop-shadow(0 0 25px rgba(255,200,50,.7));
+    animation: keyGlow 2s ease-in-out infinite alternate;
+  }
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;  /* Fills screen without distortion */
-      object-position: center;
+  @keyframes keyGlow {
+    0% {
+      filter:
+        drop-shadow(0 0 8px rgba(255,215,100,.6))
+        drop-shadow(0 0 18px rgba(255,200,50,.4))
+        drop-shadow(0 0 30px rgba(255,180,50,.2));
+      transform:translateX(-50%) scale(1);
     }
+    100% {
+      filter:
+        drop-shadow(0 0 14px rgba(255,230,120,1))
+        drop-shadow(0 0 30px rgba(255,210,80,.9))
+        drop-shadow(0 0 45px rgba(255,190,50,.8));
+      transform:translateX(-50%) scale(1.03);
+    }
+  }
 
-    /* Optional: tweak behavior for smaller screens */
-    @media (max-width: 768px) {
-      img {
-        object-fit: contain;  /* Show full image on mobile if you don’t want crop */
-        background-color: #000;
-      }
-    }
-  </style>
+  #key.dragging{opacity:.85;transform:translateX(-50%) scale(.95);cursor:grabbing}
+
+  #opened-door{
+    width:100%;height:100%;opacity:0;z-index:3;
+    pointer-events:none;
+  }
+
+  #message{
+    position:absolute;top:20px;left:0;right:0;text-align:center;
+    color:#fff;font-size:1.1rem;text-shadow:0 2px 6px rgba(0,0,0,.8);z-index:6;
+  }
+  #pill{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+    color:#fff;background:rgba(0,0,0,.45);padding:8px 12px;border-radius:999px;
+    font-size:.9rem;z-index:6;
+  }
+
+  /* ===== LIGHT LAYERS ===== */
+  .beam,.glow,.flash,.fadeout{
+    position:absolute;inset:0;pointer-events:none;opacity:0;
+  }
+
+  .beam{
+    z-index:4;filter:blur(60px);
+    background:radial-gradient(ellipse at 62% 58%,
+      rgba(255,220,140,.55)0%,
+      rgba(255,210,120,.35)20%,
+      rgba(255,190,90,.18)40%,
+      rgba(0,0,0,0)70%);
+    transform-origin:center;
+  }
+
+  .glow{
+    z-index:5;mix-blend-mode:screen;filter:blur(40px);
+    background:radial-gradient(circle at 60% 60%,
+      rgba(255,240,180,.40)0%,
+      rgba(255,215,120,.25)30%,
+      rgba(255,200,90,.12)45%,
+      rgba(0,0,0,0)70%);
+  }
+
+  .flash{
+    z-index:7;
+    background:radial-gradient(circle at center,
+      rgba(255,255,230,.95)0%,
+      rgba(255,255,180,.8)30%,
+      rgba(255,240,100,.4)60%,
+      rgba(255,240,100,0)90%);
+    filter:blur(20px);
+    transition:opacity 1.3s ease;
+  }
+
+  .fadeout{
+    z-index:8;
+    background:radial-gradient(circle at center, #fff 0%, #fff 30%, #000 100%);
+    transition:opacity 1.2s ease-in-out;
+  }
+
+  .beam.on,.glow.on{opacity:1;}
+  .beam.on{animation:beamPulse 2.4s ease-in-out infinite alternate;}
+  .glow.on{animation:glowPulse 3s ease-in-out infinite alternate;}
+
+  @keyframes beamPulse{
+    0%{transform:scale(1)rotate(-1deg);opacity:.85;}
+    100%{transform:scale(1.05)rotate(1deg);opacity:1;}
+  }
+  @keyframes glowPulse{
+    0%{filter:blur(36px);opacity:.7;}
+    100%{filter:blur(52px);opacity:.95;}
+  }
+</style>
 </head>
 <body>
-  <img src="door.png" alt="Wooden Door" />
+  <div id="message">Drag the key to unlock the door</div>
+  <div id="pill">Tip: tap the key, then tap the door (mobile)</div>
+
+  <img id="door" src="door.png" alt="Closed Door" draggable="false"/>
+  <img id="key" src="key-removebg-preview.png" alt="Key" draggable="true"/>
+  <img id="opened-door" src="dooropen.png" alt="Door Open with Light" draggable="false"/>
+
+  <div class="beam" id="beam"></div>
+  <div class="glow" id="glow"></div>
+  <div class="flash" id="flash"></div>
+  <div class="fadeout" id="fadeout"></div>
+
+  <!-- 🔊 Sounds -->
+  <audio id="doorSound" src="door-click.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="mystery.mp3" preload="auto" loop autoplay></audio>
+
+<script>
+  const key = document.getElementById('key');
+  const door = document.getElementById('door');
+  const opened = document.getElementById('opened-door');
+  const msg = document.getElementById('message');
+  const pill = document.getElementById('pill');
+  const beam = document.getElementById('beam');
+  const glow = document.getElementById('glow');
+  const flash = document.getElementById('flash');
+  const fadeout = document.getElementById('fadeout');
+  const doorSound = document.getElementById('doorSound');
+  const bgMusic = document.getElementById('bgMusic');
+
+  let selected = false;
+  let done = false;
+
+  // Try to autoplay when page loads
+  window.addEventListener('load', () => {
+    bgMusic.volume = 0.4;
+    bgMusic.play().catch(() => {
+      // fallback if browser blocks autoplay
+      document.body.addEventListener('click', () => {
+        bgMusic.play().catch(()=>{});
+      }, { once: true });
+    });
+  });
+
+  // DRAG + DROP
+  key.addEventListener('dragstart',(e)=>{
+    e.dataTransfer.setData('text/plain','key');
+    key.classList.add('dragging');
+  });
+  key.addEventListener('dragend',()=>key.classList.remove('dragging'));
+  door.addEventListener('dragover',e=>e.preventDefault());
+  door.addEventListener('drop',e=>{
+    e.preventDefault();
+    if(e.dataTransfer.getData('text/plain')==='key') reveal();
+  });
+
+  // TAP fallback
+  key.addEventListener('click',()=>{
+    if(done)return;
+    selected=!selected;
+    key.style.outline=selected?'3px solid rgba(255,205,120,.75)':'none';
+    pill.textContent=selected?'Now tap the door':'Tip: tap the key, then tap the door (mobile)';
+  });
+  door.addEventListener('click',()=>{
+    if(!done&&selected)reveal();
+  });
+
+  // MAIN SEQUENCE
+  function reveal(){
+    if(done)return;
+    done=true;
+    msg.textContent='Unlocking...';
+    key.style.opacity='0';
+    door.style.opacity='0';
+    opened.style.opacity='1';
+    opened.style.pointerEvents='auto';
+
+    // Play door sound 🔊
+    doorSound.currentTime = 0;
+    doorSound.play().catch(()=>{});
+
+    // Stop background music before transition 🎵
+    bgMusic.volume = 0.3;
+    setTimeout(()=>{
+      const fade = setInterval(()=>{
+        if(bgMusic.volume > 0.05){
+          bgMusic.volume -= 0.05;
+        } else {
+          bgMusic.pause();
+          clearInterval(fade);
+        }
+      }, 100);
+    }, 2000);
+
+    // 1️⃣ Lights appear
+    setTimeout(()=>{
+      beam.classList.add('on');
+      glow.classList.add('on');
+      msg.textContent='';
+      pill.style.display='none';
+    },300);
+
+    // 2️⃣ Hide key
+    setTimeout(()=>{key.style.display='none';},900);
+
+    // 3️⃣ Flash
+    setTimeout(()=>{flash.style.opacity='1';},2600);
+
+    // 4️⃣ Fadeout
+    setTimeout(()=>{fadeout.style.opacity='1';},3600);
+
+    // 5️⃣ Redirect
+    setTimeout(()=>{window.location.href='achievement.html';},4800);
+  }
+</script>
 </body>
 </html>
