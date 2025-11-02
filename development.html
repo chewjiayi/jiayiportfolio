@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Recent Work — Aesthetic Grid</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <!-- Add this in <head> (Google Fonts) -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --bg1: #fff6f8;
@@ -21,13 +25,23 @@
     }
 
     body {
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
-      margin: 0;
-      background: linear-gradient(180deg, var(--bg1), var(--bg2));
-      color: #0f172a;
-      padding: 48px 20px;
-      overflow-x: hidden;
-    }
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  /* Replace gradient with background image */
+  background: url("bgfordevelopment.png") no-repeat center center fixed;
+  background-size: cover;
+  color: #0f172a;
+  padding: 48px 20px;
+  overflow-x: hidden;
+}
+.background::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.4); /* or rgba(0,0,0,0.2) */
+  backdrop-filter: blur(2px);
+}
+
 
     .container {
       max-width: 1100px;
@@ -41,19 +55,25 @@
       gap: 8px;
       margin-bottom: 28px
     }
-
-    .title {
+      .title {
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 800;
       font-size: 34px
     }
+    .title .title-text {
+ font-family: "VT323", monospace;
+font-size: 28px;
+        /* adjust for readability */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  line-height: 1.4;
+  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+}
 
-    .title .spark {
-      font-size: 22px;
-      margin-top: -4px
-    }
+   
+   
 
     .subtitle {
       color: var(--muted);
@@ -363,6 +383,15 @@
   margin-top: 20px;
   display: block;
 }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.title {
+  animation: floaty 3s ease-in-out infinite;
+}
+
 
 
 
@@ -382,6 +411,8 @@
   }
 }
 
+
+
   </style>
 </head>
 
@@ -390,11 +421,16 @@
   <div class="decor d2"></div>
 
   <div class="container">
+     <main class="container">
     <header class="header">
       <div class="title"><span class="spark">✨</span>
-        <div>My Recent Work <span style="font-weight:500;color:var(--muted)">(Development)</span></div>
+        <div class =" title-text" style="color:white ; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.35); 
+
+  border-radius: 12px;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(4, 4, 4, 0.6);font-size: 60px;">My Recent Work <span style="color:white">(Development)</span></div>
       </div>
-      <p class="subtitle">This stage involves turning ideas and plans into a working product. It includes creating the main features, implementing designs, coding or building assets, integrating tools or effects, and testing components to ensure everything functions as intended.</p>
+      
     </header>
 
     <div class="grid">
