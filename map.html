@@ -150,32 +150,63 @@
   </div>
 </body>
 <script>
-  
-  window.addEventListener('DOMContentLoaded', () => {
-    // Only play if user came from index.html
-    if (sessionStorage.getItem('playAudio') === 'true') {
-      document.getElementById('bgMusic').play();
-      document.getElementById('voiceOver').play();
-      sessionStorage.removeItem('playAudio'); // clear flag
-       bgMusic.volume = 0.1;  // 0.0 = mute, 1.0 = max
+  const cursor = document.querySelector('.cursor');
 
-  // Set voiceover louder
-  voiceover.volume = 1.0; 
+  // Custom cursor movement
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  /* ------------------------------
+      SUPER LOUD VOICEOVER SETUP
+     ------------------------------ */
+
+  const voiceEl = document.getElementById("voiceOver");
+  const bgMusic = document.getElementById("bgMusic");
+
+  // Web Audio API Context
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Connect voiceover to gain booster
+  const voiceTrack = audioCtx.createMediaElementSource(voiceEl);
+  const voiceGain = audioCtx.createGain();
+
+  voiceGain.gain.value = 4.0;  
+  // ⚡ SUPER LOUD (4x boost)
+  // Change to 6 or 8 if you want it INSANELY loud
+
+  voiceTrack.connect(voiceGain).connect(audioCtx.destination);
+
+
+  /* ------------------------------
+      PLAY AUDIO WHEN COMING FROM
+      PREVIOUS PAGE WITH FLAG
+     ------------------------------ */
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (sessionStorage.getItem('playAudio') === 'true') {
+
+      audioCtx.resume(); // Required for autoplay fix
+
+      bgMusic.volume = 0.1; // soft background music
+
+      bgMusic.play().catch(() => console.log("Music blocked"));
+      voiceEl.play().catch(() => console.log("Voiceover blocked"));
+
+      sessionStorage.removeItem('playAudio');
     }
   });
-  const cursor = document.querySelector('.cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-  
+
+  /* ------------------------------
+      DOOR CLICK → ENABLE AUDIO NEXT PAGE
+     ------------------------------ */
   const door = document.querySelector('.door-link');
   door.addEventListener('click', () => {
-  sessionStorage.setItem('playAudio', 'true');
-});
-
-
+    sessionStorage.setItem('playAudio', 'true');
+  });
 </script>
+
 
 
 </html>

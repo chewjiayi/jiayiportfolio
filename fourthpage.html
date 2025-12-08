@@ -347,49 +347,68 @@
   <audio id="voiceOver" src="voiceover.mp3"></audio>
 
   <script>
-    const tooltip = document.getElementById("tooltip");
-    const cursor = document.querySelector('.cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
+  const tooltip = document.getElementById("tooltip");
+  const cursor = document.querySelector('.cursor');
+
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  /* --------------------------
+     SUPER-LOUD VoiceOver Setup
+     -------------------------- */
+  const voiceElement = document.getElementById("voiceOver");
+
+  // Create audio context + nodes
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const voiceTrack = audioCtx.createMediaElementSource(voiceElement);
+  const voiceGain = audioCtx.createGain();
+
+  // Set SUPER loud gain (4x louder — you can change to 6 or 8)
+  voiceGain.gain.value = 2.0;
+
+  // Connect: voice → gain → output
+  voiceTrack.connect(voiceGain).connect(audioCtx.destination);
+
+  function closeNote() {
+    document.getElementById("instructionOverlay").style.display = "none";
+
+    const bgMusic = document.getElementById("bgMusic");
+
+    bgMusic.volume = 0.1;
+
+    // Browser blocks autoplay until user interaction
+    audioCtx.resume();
+
+    // Play both
+    bgMusic.play().catch(() => console.log("Music blocked"));
+    voiceElement.play().catch(() => console.log("Voiceover blocked"));
+  }
+
+  // Tooltip interaction
+  document.querySelectorAll('.light').forEach(light => {
+    light.addEventListener('mousemove', e => {
+      tooltip.style.left = e.pageX + 15 + 'px';
+      tooltip.style.top = e.pageY + 15 + 'px';
+      tooltip.innerText = light.dataset.desc;
+      tooltip.style.display = 'block';
+      tooltip.style.opacity = '1';
     });
 
-
-    function closeNote() {
-      document.getElementById("instructionOverlay").style.display = "none";
-
-      const bgMusic = document.getElementById("bgMusic");
-      const voiceover = document.getElementById("voiceOver");
-
-      bgMusic.volume = 0.1;
-      voiceover.volume = 1.0;
-
-      bgMusic.play().catch(() => console.log("Music blocked"));
-      voiceover.play().catch(() => console.log("Voiceover blocked"));
-    }
-
-    // Tooltip interaction
-    document.querySelectorAll('.light').forEach(light => {
-      light.addEventListener('mousemove', e => {
-        tooltip.style.left = e.pageX + 15 + 'px';
-        tooltip.style.top = e.pageY + 15 + 'px';
-        tooltip.innerText = light.dataset.desc;
-        tooltip.style.display = 'block';
-        tooltip.style.opacity = '1';
-      });
-
-      light.addEventListener('mouseleave', () => {
-        tooltip.style.opacity = '0';
-        setTimeout(() => {
-          tooltip.style.display = 'none';
-        }, 200);
-      });
+    light.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+      setTimeout(() => {
+        tooltip.style.display = 'none';
+      }, 200);
     });
-    
-    function goToPage() {
-      window.location.href = "fifth.html"; // Change to your target HTML page
-    }
-  </script>
+  });
+
+  function goToPage() {
+    window.location.href = "fifth.html";
+  }
+</script>
+
 </body>
 
 </html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Achievements Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Background */
+        .bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("achievement.jpeg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: -1;
+        }
+
+        /* Push grid down (a bit more so it doesn’t hug the title) */
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            padding-top: 200px;
+            /* was 240px → more breathing space */
+            padding-bottom: 80px;
+            padding-left: 20px;
+            padding-right: 20px;
+            width: 100%;
+        }
+
+        /* 2-per-row layout */
+        .grid-container {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 35px;
+            justify-items: center;
+            margin-bottom: 100px;
+        }
+
+        /* WIDE LANDSCAPE CARD — slightly taller */
+        .card {
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(12px);
+
+            width: 520px;
+            height: 330px;
+            border-radius: 16px;
+
+            border: 3px solid #f5d9ff;
+            box-shadow:
+                0 0 0 2px rgba(235, 213, 255, 0.8),
+                9px 9px 0 rgba(210, 198, 255, 0.9);
+
+            display: flex;
+            align-items: center;
+            /* center everything vertically */
+            gap: 22px;
+            padding: 20px;
+
+            opacity: 0;
+            transform: translateY(20px) scale(0.97);
+            animation: fadeInUp 0.7s ease-out forwards;
+
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow:
+                0 0 0 3px rgba(240, 210, 255, 1),
+                12px 12px 0 rgba(200, 190, 255, 1);
+        }
+
+        /* LEFT IMAGE */
+        .photo-wrapper {
+            width: 160px;
+            height: 160px;
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* center image */
+            flex-shrink: 0;
+        }
+
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .photo-wrapper img {
+            transform: scale(1.08);
+        }
+
+        /* RIGHT CONTENT — centered vertically */
+        .content-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            /* center text vertically */
+            height: 100%;
+            flex: 1;
+        }
+
+        h2 {
+            color: #2f2c2f;
+            font-size: 1.35rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        p {
+            color: #4c4c4c;
+            font-size: 0.95rem;
+            line-height: 1.35;
+            margin-bottom: 16px;
+        }
+
+        /* TITLE AREA */
+        .title-wrapper {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .pixel-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 55px;
+            text-align: center;
+            letter-spacing: 6px;
+            margin-top: 10px;
+
+            /* cute standout color */
+            color: #a64fb1;
+
+            /* pixel outline + soft glow so it pops more */
+            text-shadow:
+                -4px 0 #7b3fc6,
+                4px 0 #7b3fc6,
+                0 -4px #7b3fc6,
+                0 4px #7b3fc6,
+                0 0 12px rgba(255, 200, 255, 0.6);
+        }
+
+        /* Button */
+        .btn {
+            width: fit-content;
+            padding: 10px 24px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #a5f3fc, #f9a8d4, #fde68a);
+            border: 2px solid rgba(255, 255, 255, 0.8);
+            color: #111;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.9rem;
+            box-shadow: 0 6px 12px rgba(252, 211, 77, 0.7);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 20px rgba(252, 211, 77, 0.9);
+        }
+
+        /* Fade-in */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Mobile layout */
+        @media (max-width: 1000px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+
+            .card {
+                width: 95%;
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg"></div>
+
+    <div class="title-wrapper">
+        <h1 class="pixel-title">ACHIEVEMENT</h1>
+    </div>
+
+    <div class="wrapper">
+        <div class="grid-container">
+
+            <!-- CARD 1 -->
+            <div class="card">
+                <div class="photo-wrapper">
+                    <img src="Competition.jpeg" alt="">
+                </div>
+                <div class="content-box">
+                    <h2>Awards & Competition</h2>
+                    <p>Explore the competitions I've joined and awards I've received.</p>
+                    <a href="achievement_awards.html" class="btn">View More</a>
+                </div>
+            </div>
+
+            <!-- CARD 2 -->
+            <div class="card">
+                <div class="photo-wrapper">
+                    <img src="servicelearning.jpeg" alt="">
+                </div>
+                <div class="content-box">
+                    <h2>Service Learning & Community</h2>
+                    <p>See my volunteering journey and contributions to the community.</p>
+                    <a href="achievement_service.html" class="btn">View More</a>
+                </div>
+            </div>
+
+            <!-- CARD 3 -->
+            <div class="card">
+                <div class="photo-wrapper">
+                    <img src="Leadership.jpeg" alt="">
+                </div>
+                <div class="content-box">
+                    <h2>Leadership</h2>
+                    <p>Discover leadership roles I've taken in school and projects.</p>
+                    <a href="achievement_leadership.html" class="btn">View More</a>
+                </div>
+            </div>
+
+            <!-- CARD 4 -->
+            <div class="card">
+                <div class="photo-wrapper">
+                    <img src="academic.jpeg" alt="">
+                </div>
+                <div class="content-box">
+                    <h2>Academic Achievement</h2>
+                    <p>A showcase of my academic excellence and learning milestones.</p>
+                    <a href="achievement_academic.html" class="btn">View More</a>
+                </div>
+            </div>
+            <!-- NEXT BUTTON -->
+            <!-- NEXT BUTTON -->
+<a href="nextpage.html" 
+   style="
+        position: fixed;
+        bottom: 40px;
+        right: 50px;
+        background: linear-gradient(135deg, #ffb6c1, #ff80ab);
+        color: white;
+        padding: 14px 32px;
+        border: none;
+        border-radius: 40px;
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(255, 128, 171, 0.5);
+        opacity: 1;
+        pointer-events: auto;
+        transition: opacity 0.5s ease, transform 0.2s ease;
+        text-decoration: none;
+        z-index: 9999;
+   "
+   onmouseover="this.style.transform='scale(1.05)'"
+   onmouseout="this.style.transform='scale(1)'">
+    NEXT →
+</a>
+
+
+
+        </div>
+    </div>
+
+</body>
+
+</html>

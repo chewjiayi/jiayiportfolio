@@ -29,10 +29,11 @@
       padding: 48px 20px;
       overflow-x: hidden;
     }
+
     body {
-  background: url('BG3.png') no-repeat center center fixed;
-  background-size: cover;
-}
+      background: url('BG3.png') no-repeat center center fixed;
+      background-size: cover;
+    }
 
     .container {
       max-width: 1100px;
@@ -47,22 +48,23 @@
       margin-bottom: 28px
     }
 
-   .title {
+    .title {
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 800;
       font-size: 34px
     }
+
     .title .title-text {
- font-family: "VT323", monospace;
-font-size: 28px;
-        /* adjust for readability */
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  line-height: 1.4;
-  text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-}
+      font-family: "VT323", monospace;
+      font-size: 28px;
+      /* adjust for readability */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.4;
+      text-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+    }
 
     .subtitle {
       color: var(--muted);
@@ -95,6 +97,7 @@ font-size: 28px;
     }
 
     @keyframes float {
+
       0%,
       100% {
         transform: translateY(0) rotate(0deg);
@@ -300,97 +303,104 @@ font-size: 28px;
 
     /* Modal */
     /* Modal base */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background: rgba(255, 192, 203, 0.3);
-  backdrop-filter: blur(6px);
-}
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background: rgba(255, 192, 203, 0.3);
+      backdrop-filter: blur(6px);
+    }
 
-.modal.active {
-  display: block;
-}
+    .modal.active {
+      display: block;
+    }
 
-.modal-content {
-  background: white;
-  margin: 80px auto;
-  padding: 24px;
-  border-radius: 16px;
-  width: 80%;
-  max-width: 700px;
+    .modal-content {
+      background: white;
+      margin: 80px auto;
+      padding: 24px;
+      border-radius: 16px;
+      width: 80%;
+      max-width: 700px;
 
-  /* Make scrollable */
-  max-height: 80vh;   /* Limit height to 80% of viewport */
-  overflow-y: auto;   /* Enable vertical scroll */
-  overflow-x: hidden; /* Prevent horizontal scroll */
-  
-  position: relative;
-  box-shadow: 0 8px 24px rgba(255, 102, 153, 0.25);
-  text-align: center;
-  animation: fadeUpModal 0.6s ease;
-  transform: translateY(30px);
-}
+      /* Make scrollable */
+      max-height: 80vh;
+      /* Limit height to 80% of viewport */
+      overflow-y: auto;
+      /* Enable vertical scroll */
+      overflow-x: hidden;
+      /* Prevent horizontal scroll */
 
-.modal-content h2 {
-  color: #ff6699;
-  margin-bottom: 10px;
-}
+      position: relative;
+      box-shadow: 0 8px 24px rgba(255, 102, 153, 0.25);
+      text-align: center;
+      animation: fadeUpModal 0.6s ease;
+      transform: translateY(30px);
+    }
 
-.modal-content p {
-  color: #555;
-}
+    .modal-content h2 {
+      color: #ff6699;
+      margin-bottom: 10px;
+    }
 
-.close {
-  color: #aaa;
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    .modal-content p {
+      color: #555;
+    }
 
-.close:hover {
-  color: #ff6699;
-}
+    .close {
+      color: #aaa;
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-/* Video fade-up effect */
+    .close:hover {
+      color: #ff6699;
+    }
 
-#modalVideo {
-  width: 100%;       /* Full width of modal */
-  max-width: 100%;   /* Prevent overflow */
-  height: auto;      /* Maintain aspect ratio */
-  max-height: 60vh;  /* Limit height so it doesn't exceed viewport */
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(255, 85, 122, 0.3);
-  margin-top: 20px;
-  display: block;
-}
+    /* Video fade-up effect */
+
+    #modalVideo {
+      width: 100%;
+      /* Full width of modal */
+      max-width: 100%;
+      /* Prevent overflow */
+      height: auto;
+      /* Maintain aspect ratio */
+      max-height: 60vh;
+      /* Limit height so it doesn't exceed viewport */
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(255, 85, 122, 0.3);
+      margin-top: 20px;
+      display: block;
+    }
 
 
 
-#modalVideo.fade-in {
-  opacity: 1;
-  transform: translateY(0);
-}
+    #modalVideo.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-@keyframes fadeUpModal {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+    @keyframes fadeUpModal {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
 
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   </style>
 </head>
 
@@ -398,16 +408,17 @@ font-size: 28px;
   <div class="decor d1"></div>
   <div class="decor d2"></div>
 
-   <main class="container">
+  <main class="container">
     <header class="header">
       <div class="title"><span class="spark">✨</span>
-        <div class =" title-text" style="color:white ; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.35); 
+        <div class=" title-text" style="color:white ; text-shadow: 0 3px 6px rgba(0, 0, 0, 0.35); 
 
   border-radius: 12px;
   color: #fff;
-  text-shadow: 0 2px 8px rgba(4, 4, 4, 2);font-size: 50px;">My Recent Work <span style="color:white">(Design & Development)</span></div>
+  text-shadow: 0 2px 8px rgba(4, 4, 4, 2);font-size: 50px;">My Recent Work <span style="color:white">(Design &
+            Development)</span></div>
       </div>
-      
+
     </header>
 
     <div class="grid">
@@ -426,9 +437,11 @@ font-size: 28px;
             <div class="chip">Node.js</div>
           </div>
           <h3 class="h3">My Counseling App</h3>
-          <p class="desc">A web app designed to support users facing emotional stress. Users can input their feelings and receive empathetic responses, helpline info, and helpful suggestions, providing comfort and reassurance in a safe, approachable platform..</p>
-          
-          <a href="#" class="link" data-title="Counseling App"  data-video="counselling_webpage.mp4" data-desc="<b>Conceptualisation</b><br><br>
+          <p class="desc">A web app designed to support users facing emotional stress. Users can input their feelings
+            and receive empathetic responses, helpline info, and helpful suggestions, providing comfort and reassurance
+            in a safe, approachable platform..</p>
+
+          <a href="#" class="link" data-title="Counseling App" data-video="counselling_webpage.mp4" data-desc="<b>Conceptualisation</b><br><br>
 I decided to create this counseling website because it addresses a real problem: many people facing emotional stress hesitate to seek a real-life counsellor. This resonated with me personally, as I have also felt nervous and unsure about reaching out for help. I wanted to design a platform that feels safe, approachable, and supportive for users.<br><br>
 
 <b>Planning</b><br><br>
@@ -451,8 +464,7 @@ The final web app is fully functional and visually appealing, offering a support
     text-decoration:none;
     box-shadow:0 4px 10px rgba(255,85,122,0.3);
     transition:background 0.3s;
-  '>View site</a>"
-   data-video="counselling_webpage.mp4">View Case study</a>
+  '>View site</a>" data-video="counselling_webpage.mp4">View Case study</a>
         </div>
       </div>
 
@@ -473,8 +485,11 @@ The final web app is fully functional and visually appealing, offering a support
             <div class="chip">Design</div>
           </div>
           <h3 class="h3">Flower</h3>
-          <p class="desc">I designed a flower animation that shows a flower growing and blooming using digital illustration and animation techniques. The smooth transitions and glowing effects symbolize growth, creativity, and beauty.</p>
-          <a href="#" class="link" data-title="Flower" data-desc="<b>Planning</b><br><br>
+          <p class="desc">I designed a flower animation that shows a flower growing and blooming using digital
+            illustration and animation techniques. The smooth transitions and glowing effects symbolize growth,
+            creativity, and beauty.</p>
+          <a href="#" class="link" data-title="Flower"
+            data-desc="<b>Planning</b><br><br>
 
 During the planning stage, I decided on the animation flow — starting from the stem growing upward, followed by the petals blooming one by one. I also planned the use of light and movement effects to make the animation look natural and smooth. Tools and techniques such as vector design, gradients, and layer organization were outlined before starting the actual development.<br><br>
 <b>Development</b><br><br>
@@ -487,7 +502,8 @@ During the development stage, I created the flower animation using digital illus
 
 <b>Outcome</b><br><br>
 
-The final design resulted in a beautiful and captivating flower animation that effectively showcases growth and elegance. The color contrast and smooth motion created a calm and pleasing visual experience. Overall, the project demonstrated creativity, design precision, and animation skills in bringing a simple flower to life." data-video="Flower.mp4">Learn More</a>
+The final design resulted in a beautiful and captivating flower animation that effectively showcases growth and elegance. The color contrast and smooth motion created a calm and pleasing visual experience. Overall, the project demonstrated creativity, design precision, and animation skills in bringing a simple flower to life."
+            data-video="Flower.mp4">View Case study</a>
         </div>
       </div>
 
@@ -508,7 +524,9 @@ The final design resulted in a beautiful and captivating flower animation that e
             <div class="chip">JS</div>
           </div>
           <h3 class="h3">Teacher's Day Card</h3>
-          <p class="desc">I created an interactive Teacher’s Day card using HTML, CSS, and JavaScript to express my gratitude to my lecturer. The card features simple animations, attractive colors, and a heartfelt message, combining creativity and coding to make the greeting more personal and engaging.</p>
+          <p class="desc">I created an interactive Teacher’s Day card using HTML, CSS, and JavaScript to express my
+            gratitude to my lecturer. The card features simple animations, attractive colors, and a heartfelt message,
+            combining creativity and coding to make the greeting more personal and engaging.</p>
           <a href="#" class="link" data-title="Teacher's Day Card" data-desc="<b>Conceptualization</b><br><br>
 
 The idea was to create an interactive Teacher’s Day card using HTML, CSS, and JavaScript to express gratitude and appreciation toward my lecturer. I wanted the card to be meaningful, visually appealing, and animated to make it feel more personal and heartfelt. The concept focused on blending design and interactivity to deliver a warm and sincere message.<br><br>
@@ -556,7 +574,9 @@ The final Teacher’s Day card turned out to be a thoughtful and interactive dig
             <div class="chip">Javascript</div>
           </div>
           <h3 class="h3">E-Book Portfolio</h3>
-          <p class="desc">I created an interactive book portfolio with page-flip animation using HTML, CSS, and JavaScript. Each page can be flipped smoothly like a real book, showcasing my projects in an engaging and creative way that leaves a strong visual impression.</p>
+          <p class="desc">I created an interactive book portfolio with page-flip animation using HTML, CSS, and
+            JavaScript. Each page can be flipped smoothly like a real book, showcasing my projects in an engaging and
+            creative way that leaves a strong visual impression.</p>
           <a href="#" class="link" data-title="Book Portfolio" data-desc="<b>Conceptualization:</b><br><br>
 
 The idea was to create a digital portfolio that mimics the experience of flipping through a real book. By integrating interactivity and animation, the goal was to present projects in a visually engaging and memorable way, making it stand out from standard web portfolios. The focus was on smooth page transitions, clear project organization, and a creative, immersive user experience.<br><br>
@@ -620,7 +640,9 @@ The portfolio demonstrates both design and development capabilities, effectively
             <div class="chip">Node.js</div>
           </div>
           <h3 class="h3">Online Supermarket</h3>
-          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
+          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their
+            cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the
+            interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
           <a href="#" class="link" data-title="Online Supermarket" data-desc="<b>Conceptualization:</b><br><br>
 The goal was to create an engaging and user-friendly online supermarket with a cute, playful aesthetic. The design emphasizes colorful visuals, appealing icons, and a cheerful interface to make shopping online fun and memorable, especially for younger audiences or casual users.<br><br>
 
@@ -652,11 +674,12 @@ The project demonstrates creativity in design, combined with technical skills in
 
 Leaves a memorable impression through both interactivity and playful visual design.<br><br>
 
-Sketch wireframes and plan color palette, typography, and iconography to ensure a cohesive cute theme." data-video="Online_supermarket.mp4">Learn More</a>
+Sketch wireframes and plan color palette, typography, and iconography to ensure a cohesive cute theme."
+            data-video="Online_supermarket.mp4">View Case study</a>
         </div>
       </div>
 
-       <!-- CARD 6: VIDEO -->
+      <!-- CARD 6: VIDEO -->
       <div class="card">
         <div class="thumb-wrap">
           <video class="thumbnail" autoplay muted loop playsinline>
@@ -672,7 +695,9 @@ Sketch wireframes and plan color palette, typography, and iconography to ensure 
             <div class="chip">JS</div>
           </div>
           <h3 class="h3">Virtual Love Letter for friend</h3>
-          <p class="desc">An interactive digital love letter for a sick friend, featuring gentle animations, soft colors, and personalized messages to convey care and encouragement. This project combines creativity and web development skills to create a touching, memorable experience.</p>
+          <p class="desc">An interactive digital love letter for a sick friend, featuring gentle animations, soft
+            colors, and personalized messages to convey care and encouragement. This project combines creativity and web
+            development skills to create a touching, memorable experience.</p>
           <a href="#" class="link" data-title="Virtual Love Letter" data-desc="<b>Conceptualization:</b><br><br>
 The idea was to create a heartfelt virtual love letter to a friend who is unwell. The project aims to convey care, encouragement, and warmth digitally, using interactive and visually appealing elements to make the message more personal and memorable.<br><br>
 
@@ -702,7 +727,8 @@ A warm and interactive virtual love letter that delivers a heartfelt message to 
 
 Engaging animations and personalized design make the experience touching and memorable.
 
-Demonstrates creativity, empathy, and technical skills in web development." data-video="virtualloveletter.mp4">Learn More</a>
+Demonstrates creativity, empathy, and technical skills in web development." data-video="virtualloveletter.mp4">View
+            Case study</a>
         </div>
       </div>
       <div class="card hero-card">
@@ -720,7 +746,9 @@ Demonstrates creativity, empathy, and technical skills in web development." data
             <div class="chip">Javascript</div>
           </div>
           <h3 class="h3">KPOP Website</h3>
-          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
+          <p class="desc">A playful and colorful online supermarket where users can browse products, add items to their
+            cart, and enjoy a smooth shopping experience. The cute design with pastel colors and fun icons makes the
+            interface engaging and memorable, showcasing both creativity and front-end development skills.</p>
           <a href="#" class="link" data-title="KPOP Website" data-desc="<b>Conceptualization:</b><br><br>
 The website was designed to engage K-pop fans through quizzes that test their knowledge and fandom. It also keeps fans updated with the latest comebacks of their favorite groups, making the site both interactive and informative.<br><br>
 <b>Planning</b><br><br>:
@@ -749,92 +777,92 @@ An interactive K-pop fan website that tests knowledge with quizzes and keeps fan
 
 Engaging visuals and dynamic features create an immersive fan experience.
 
-Showcases both creativity and front-end web development skills." data-video="KPOP_website.mp4">Learn More</a>
+Showcases both creativity and front-end web development skills." data-video="KPOP_website.mp4">View Case study</a>
         </div>
       </div>
 
-      
-  </div>
 
-  <!-- MODAL -->
-  <!-- MODAL -->
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2 id="modalTitle">Project Title</h2>
+    </div>
 
-    <!-- Video first -->
-    <video id="modalVideo" controls autoplay muted playsinline>
-      <source id="modalVideoSource" src="" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <!-- MODAL -->
+    <!-- MODAL -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2 id="modalTitle">Project Title</h2>
 
-    <!-- Description below video -->
-    <p id="modalDesc">Project description here.</p>
-  </div>
-</div>
+        <!-- Video first -->
+        <video id="modalVideo" controls autoplay muted playsinline>
+          <source id="modalVideoSource" src="" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+
+        <!-- Description below video -->
+        <p id="modalDesc">Project description here.</p>
+      </div>
+    </div>
 
 
 
- <a href="sixth.html">
-  <button class="next-btn">←Back</button>
-</a>
-
-  
-
- 
-
-<script>
-const modal = document.getElementById("myModal");
-const modalVideo = document.getElementById("modalVideo");
-const modalTitle = document.getElementById("modalTitle");
-const modalDesc = document.getElementById("modalDesc");
-const close = document.querySelector(".close");
-
-// Open modal
-function openModal(src, title, desc) {
-  modal.classList.add("active");
-  modalTitle.textContent = title;
-  modalDesc.innerHTML = desc;
-
-  const modalSource = document.getElementById("modalVideoSource");
-  modalSource.src = src;
-
-  // Load and play video
-  modalVideo.load();
-  modalVideo.muted = true; // required for autoplay in most browsers
-  modalVideo.play().catch(err => {
-    console.log("Autoplay blocked:", err);
-  });
-}
-
-// Close modal
-close.addEventListener("click", () => {
-  modal.classList.remove("active");
-  modalVideo.pause();
-  modalVideo.currentTime = 0;
-  // Do NOT clear the src; leave it for the next open
-});
-
-// Handle card clicks
-document.querySelectorAll(".link").forEach(link => {
-  link.addEventListener("click", e => {
-    e.preventDefault();
-    const src = link.dataset.video;
-    const title = link.dataset.title;
-    const desc = link.dataset.desc;
-    if (src) openModal(src, title, desc);
-  });
-});
-</script>
+    <a href="sixth.html">
+      <button class="next-btn">←Back</button>
+    </a>
 
 
 
 
 
+    <script>
+      const modal = document.getElementById("myModal");
+      const modalVideo = document.getElementById("modalVideo");
+      const modalTitle = document.getElementById("modalTitle");
+      const modalDesc = document.getElementById("modalDesc");
+      const close = document.querySelector(".close");
+
+      // Open modal
+      function openModal(src, title, desc) {
+        modal.classList.add("active");
+        modalTitle.textContent = title;
+        modalDesc.innerHTML = desc;
+
+        const modalSource = document.getElementById("modalVideoSource");
+        modalSource.src = src;
+
+        // Load and play video
+        modalVideo.load();
+        modalVideo.muted = true; // required for autoplay in most browsers
+        modalVideo.play().catch(err => {
+          console.log("Autoplay blocked:", err);
+        });
+      }
+
+      // Close modal
+      close.addEventListener("click", () => {
+        modal.classList.remove("active");
+        modalVideo.pause();
+        modalVideo.currentTime = 0;
+        // Do NOT clear the src; leave it for the next open
+      });
+
+      // Handle card clicks
+      document.querySelectorAll(".link").forEach(link => {
+        link.addEventListener("click", e => {
+          e.preventDefault();
+          const src = link.dataset.video;
+          const title = link.dataset.title;
+          const desc = link.dataset.desc;
+          if (src) openModal(src, title, desc);
+        });
+      });
+    </script>
 
 
-</script>
+
+
+
+
+
+    </script>
 
 
 

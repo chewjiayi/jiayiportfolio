@@ -161,30 +161,32 @@
       <img src="nextbutton.png" alt="Next" class="next-btn">
     </a>
   <script>
-    const bgMusic = document.getElementById("bg-music");
+  const audioElement = document.getElementById("bg-music");
 
-    // Gradually fade in music after a short delay
-    function fadeInAudio(audio, duration = 5000, targetVolume = 1) {
-      let volume = 0;
-      audio.volume = 0;
-      const interval = 50;
-      const increment = (targetVolume * interval) / duration;
+  // Create Web Audio API context
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const track = audioContext.createMediaElementSource(audioElement);
 
-      const fade = setInterval(() => {
-        volume += increment;
-        if (volume >= targetVolume) {
-          audio.volume = targetVolume;
-          clearInterval(fade);
-        } else {
-          audio.volume = volume;
-        }
-      }, interval);
-    }
+  // Create gain node to amplify volume
+  const gainNode = audioContext.createGain();
+  gainNode.gain.value = 6.0;   // 🔥 SUPER LOUD (4x louder) – you can increase to 6 or 8 if you want
 
-    window.addEventListener("load", () => {
-      fadeInAudio(bgMusic, 3000, 1.2); // fade in over 3 seconds to full volume
-    });
-  </script>
+  track.connect(gainNode).connect(audioContext.destination);
+
+  // Fade-in effect still works
+  function fadeInAudio(target = 4.0, duration = 3000) {
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(target, audioContext.currentTime + duration / 1000);
+  }
+
+  // Start audio after user interacts (browser rule)
+  window.addEventListener("click", () => {
+    audioContext.resume();
+    audioElement.play();
+    fadeInAudio(4.0, 3000); // fade into super loud mode
+  }, { once: true });
+</script>
+
 </body>
 
 </html>

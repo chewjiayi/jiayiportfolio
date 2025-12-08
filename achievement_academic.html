@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Academic Achievement Wall</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Fredoka:wght@500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* -------------------------
+       BACKGROUND (Academic Blue Theme)
+    -------------------------- */
+    body {
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+
+      /* change this to your academic bg image */
+      background: url("academicbg.png") center/100% no-repeat fixed;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(0px);
+      z-index: -1;
+    }
+
+    /* -------------------------
+       MAIN CONTAINER (Sapphire Blue + Silver)
+    -------------------------- */
+    .achievements-container {
+      background: rgba(220, 235, 255, 0.95); /* ice blue */
+
+      background-image: linear-gradient(
+        to bottom right,
+        rgba(220, 235, 255, 0.97), /* light */
+        rgba(74, 116, 217, 0.92)   /* sapphire */
+      );
+
+      border-radius: 28px;
+      padding: 24px 32px 40px;
+
+      border: 3px solid rgba(30, 58, 128, 0.95); /* deep navy */
+      backdrop-filter: blur(12px);
+
+      box-shadow:
+        0 20px 50px rgba(20, 40, 90, 0.55),
+        inset 0 0 18px rgba(150, 180, 240, 0.5);
+
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    /* -------------------------
+       HEADER
+    -------------------------- */
+    .achievements-header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: #C9D4E3;      /* silver */
+      border: 2px solid #4A74D9; /* academic blue */
+      font-size: 12px;
+      color: #223054;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .achievements-header h1 {
+      font-family: "Press Start 2P", cursive;
+      font-size: 20px;
+      color: #223054; /* dark blue */
+      text-shadow: 0 2px 0 #E8F0FF;
+    }
+
+    /* -------------------------
+       GRID
+    -------------------------- */
+    .achievement-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    /* -------------------------
+       CARD
+    -------------------------- */
+    .achievement-card {
+      position: relative;
+      background: #F4F7FF;        /* very light blue */
+      border-radius: 18px;
+      padding: 20px;
+      border: 3px solid #C0CDEE;  /* pale blue border */
+      box-shadow: 0 8px 0 #8FA5D8, 0 8px 20px rgba(0,0,0,0.15);
+      transition: 0.25s ease;
+      cursor: pointer;
+    }
+
+    .achievement-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 0 #4A74D9, 0 12px 28px rgba(0,0,0,0.2);
+    }
+
+    .achievement-card:hover::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 18px;
+      border: 2px dashed #4A74D9;
+      box-shadow: 0 0 12px #C9D4F5;
+      animation: pixelGlow 1.2s infinite linear;
+    }
+
+    @keyframes pixelGlow {
+      0%   { box-shadow: 0 0 5px #DCEBFF; }
+      50%  { box-shadow: 0 0 12px #C0D4FF; }
+      100% { box-shadow: 0 0 5px #DCEBFF; }
+    }
+
+    /* -------------------------
+       TEXT
+    -------------------------- */
+    .trophy-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .achievement-card h2 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 18px;
+      margin-bottom: 6px;
+      color: #223054;
+    }
+
+    .achievement-meta {
+      font-size: 12px;
+      color: #4B5A80;
+      margin-bottom: 10px;
+    }
+
+    .achievement-desc {
+      font-size: 13px;
+      color: #314166;
+    }
+
+    /* TAG CHIPS */
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 12px 0;
+    }
+
+    .chip {
+      padding: 5px 10px;
+      border-radius: 6px;
+      background: #E4ECFF;
+      border: 2px solid #C0CDEE;
+      font-size: 11px;
+      color: #2B3550;
+      font-weight: 600;
+    }
+
+    /* EXPAND CONTENT */
+    .expand-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+      background: #F7FAFF;
+      border: 2px solid #C0CDEE;
+      border-radius: 14px;
+      padding: 0 10px;
+      margin-top: 12px;
+      box-shadow: inset 0 0 12px #DEE6F8;
+    }
+
+    .expand-content img {
+      width: 100%;
+      border-radius: 10px;
+      margin-top: 10px;
+      border: 2px solid #C0CDEE;
+      box-shadow: 0 8px 20px rgba(70, 90, 140, 0.25);
+    }
+
+    .expand-text {
+      font-size: 13px;
+      padding: 12px 4px 18px;
+      color: #314166;
+      line-height: 1.5;
+    }
+
+    /* RESPONSIVE */
+    @media(max-width: 900px) {
+      .achievement-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 600px) {
+      .achievement-grid { grid-template-columns: 1fr; }
+    }
+
+    /* BACK BUTTON */
+    .next-btn {
+      position: fixed;
+      bottom: -95px;
+      right: -110px;
+      background: linear-gradient(135deg, #9BB5FF, #4A74D9);
+      color: white;
+      padding: 14px 32px;
+      border: none;
+      border-radius: 40px;
+      font-size: 18px;
+      font-weight: 600;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(60, 90, 170, 0.4);
+      transition: all 0.3s ease;
+      letter-spacing: 1px;
+    }
+
+    .next-btn:hover {
+      background: linear-gradient(135deg, #4A74D9, #293E8F);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(41, 62, 143, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="achievements-container">
+    <div class="achievements-header">
+      <span class="tag">Achievements</span>
+      <h1>Academic Achievement Wall</h1>
+    </div>
+
+    <div class="achievement-grid">
+
+      <!-- CARD 1 – example, edit to your real thing -->
+      <article class="achievement-card">
+        <div class="trophy-icon">📘✨</div>
+        <h2>Director roll of honour</h2>
+        <p class="achievement-meta">Republic Polytechnic</p>
+        <p class="achievement-desc">
+          Recognised for strong academic performance and consistent excellence across core modules.
+        </p>
+
+        <div class="chip-row">
+          <span class="chip">Excellence</span>
+          <span class="chip">GPA</span>
+        </div>
+
+        <div class="expand-content">
+          <img src="directorroll.jpg">
+          <p class="expand-text">
+            <!-- Write your detailed story here -->
+            I maintained strong results while balancing projects, competitions, and service learning, showing discipline and time management.
+          </p>
+        </div>
+      </article>
+
+      <!-- CARD 2 -->
+      <article class="achievement-card">
+        <div class="trophy-icon">📚📈</div>
+        <h2>Good Progress award</h2>
+        <p class="achievement-meta">Guangyang Secondary School</p>
+        <p class="achievement-desc">
+          Awarded for showing significant improvement in academic performance and consistent good conduct throughout the year.
+        </p>
+
+        <div class="chip-row">
+          <span class="chip">Grade</span>
+          <span class="chip">Progress</span>
+        </div>
+
+        <div class="expand-content">
+          <img src="goodpregressaward.png">
+          <p class="expand-text">
+            <!-- Edit this as you like -->
+            This award recognises students who’ve made strong academic progress and shown consistent good behaviour.
+          </p>
+        </div>
+      </article>
+
+      <!-- CARD 3 -->
+      <article class="achievement-card">
+        <div class="trophy-icon">📊🔍</div>
+        <h2>Top in Chinese</h2>
+        <p class="achievement-meta">Guangyang Secondary School</p>
+        <p class="achievement-desc">
+          Achieved the highest score in Chinese language examinations, demonstrating strong proficiency and dedication to language studies.
+        </p>
+
+        <div class="chip-row">
+          <span class="chip">Language</span>
+          <span class="chip">Excellence</span>
+        </div>
+
+        <div class="expand-content">
+          <img src="topinchinese.jpg">
+          <p class="expand-text">
+            <!-- Your own details here -->
+            I achieved the highest score in Chinese language examinations by dedicating time to study, practicing language skills, and seeking feedback to improve.
+          </p>
+        </div>
+      </article>
+
+      <a href="myachievement.html">
+        <button class="next-btn">← Back</button>
+      </a>
+
+    </div>
+  </div>
+
+<script>
+  // expand cards on click
+  document.querySelectorAll(".achievement-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const expanded = card.querySelector(".expand-content");
+      expanded.style.maxHeight =
+        expanded.style.maxHeight ? null : expanded.scrollHeight + "px";
+    });
+  });
+
+  // stop links inside card from toggling
+  document.querySelectorAll(".achievement-card a").forEach(link => {
+    link.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  });
+
+  document.querySelectorAll(".expand-content").forEach(expand => {
+    expand.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  });
+</script>
+
+</body>
+</html>

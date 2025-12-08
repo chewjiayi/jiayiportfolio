@@ -89,30 +89,70 @@
 </div>
 
 <script>
+/* ---------------------------------------------------
+   SUPER-LOUD AUDIO BOOSTER for VoiceOver
+--------------------------------------------------- */
+const bgMusic = document.getElementById("bgMusic");
+const voiceEl = document.getElementById("voiceOver");
+
+// Create Web Audio API context
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Music stays normal → no need for gain boost
+const musicTrack = audioCtx.createMediaElementSource(bgMusic);
+musicTrack.connect(audioCtx.destination);
+
+// Voiceover → Gain boost
+const voiceTrack = audioCtx.createMediaElementSource(voiceEl);
+const voiceGain = audioCtx.createGain();
+
+// SUPER LOUD BOOST (change value if you want louder)
+voiceGain.gain.value = 6.0;  
+// 4.0 = very loud
+// 6.0 = extremely loud
+// 8.0 = maximum boost before distortion
+
+// Connect boosted voiceover
+voiceTrack.connect(voiceGain).connect(audioCtx.destination);
+
+
+/* ---------------------------------------------------
+   AUTOPLAY SYSTEM WHEN COMING FROM LAST PAGE
+--------------------------------------------------- */
 window.addEventListener('DOMContentLoaded', () => {
-    const bgMusic = document.getElementById('bgMusic');
-    const voiceover = document.getElementById('voiceOver');
     if (sessionStorage.getItem('playAudio') === 'true') {
-        bgMusic.volume = 0.2;
-        voiceover.volume = 1.0;
-        bgMusic.play().catch(() => console.log('Autoplay blocked'));
-        voiceover.play().catch(() => console.log('Autoplay blocked'));
+
+        audioCtx.resume(); // Required for autoplay in Chrome
+
+        bgMusic.volume = 0.2;   // soft music
+        bgMusic.play().catch(() => console.log("Music blocked"));
+
+        voiceEl.play().catch(() => console.log("Voiceover blocked"));
+
         sessionStorage.removeItem('playAudio');
     }
 });
 
 
+/* ---------------------------------------------------
+   CUSTOM CURSOR
+--------------------------------------------------- */
+const cursor = document.querySelector('.cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+
+
+/* ---------------------------------------------------
+   TOOLTIP + UNLOCK SYSTEM
+--------------------------------------------------- */
 const tooltip = document.getElementById('tooltip');
 const laptop = document.getElementById('laptop');
-let hoveredObjects = new Set(); // store unique hovered object IDs
-const cursor = document.querySelector('.cursor');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
+let hoveredObjects = new Set();
 
 document.querySelectorAll('.object').forEach(obj => {
-    if(obj.id !== 'laptop') {
+    if (obj.id !== 'laptop') {
         obj.addEventListener('mousemove', e => {
             tooltip.style.left = e.pageX + 15 + 'px';
             tooltip.style.top = e.pageY + 15 + 'px';
@@ -129,38 +169,33 @@ document.querySelectorAll('.object').forEach(obj => {
         obj.addEventListener('mouseenter', () => {
             hoveredObjects.add(obj.id);
             if (hoveredObjects.size >= 3) {
-                // Glow laptop after 3 different objects hovered
                 laptop.style.boxShadow = '0 0 20px #00f, 0 0 30px #0ff';
             }
         });
-        
     }
 });
 
-// Laptop hover
+
+/* ---------------------------------------------------
+   LAPTOP INTERACTION
+--------------------------------------------------- */
 laptop.addEventListener('mouseenter', () => {
     if (hoveredObjects.size >= 3) {
         laptop.style.transform = 'translate(-50%, -50%) scale(1.05)';
     }
 });
+
 laptop.addEventListener('mouseleave', () => {
     laptop.style.transform = 'translate(-50%, -50%) scale(1)';
 });
 
-// Laptop click
 laptop.addEventListener('click', () => {
-  if (hoveredObjects.size < 3) return; // not unlocked yet
+    if (hoveredObjects.size < 3) return;
 
-  // Set flag so next page knows to play voiceover
-  sessionStorage.setItem('playAudio', 'true');
-
-  // Go to next page immediately
-  window.location.href = 'fourthpage.html';
+    sessionStorage.setItem('playAudio', 'true');
+    window.location.href = 'fourthpage.html';
 });
-
-
-
-
 </script>
+
 </body>
 </html>

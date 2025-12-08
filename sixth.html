@@ -242,17 +242,38 @@
     window.location.href = 'unlockdoor.html';
   });
   
-  const bgMusic = document.getElementById("bgMusic");
+ const bgMusic = document.getElementById("bgMusic");
 const voiceNarration = document.getElementById("voiceNarration");
 
-// Fade-in background music
-function fadeInAudio(audio, duration = 5000, targetVolume = 1) {
+// Create Web Audio API context
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Connect background music normally
+const musicTrack = audioCtx.createMediaElementSource(bgMusic);
+musicTrack.connect(audioCtx.destination);
+
+// Connect voice narration to a gain booster
+const narrationTrack = audioCtx.createMediaElementSource(voiceNarration);
+const narrationGain = audioCtx.createGain();
+
+// SUPER LOUD BOOST (adjust to your liking)
+narrationGain.gain.value = 2.0; 
+// 4.0 = very loud
+// 6.0 = extremely loud
+// 8.0 = ultra-loud (may distort slightly)
+
+narrationTrack.connect(narrationGain).connect(audioCtx.destination);
+
+// ---------------------------------------------
+// FADE IN BACKGROUND MUSIC
+// ---------------------------------------------
+function fadeInAudio(audio, duration = 4000, targetVolume = 1) {
   let volume = 0;
   audio.volume = 0;
-  audio.play().catch(() => console.log("Autoplay blocked"));
+  audio.play().catch(() => console.log("Autoplay blocked background"));
 
-  const intervalTime = 50;
-  const increment = (targetVolume * intervalTime) / duration;
+  const interval = 50;
+  const increment = (targetVolume * interval) / duration;
 
   const fade = setInterval(() => {
     volume += increment;
@@ -262,15 +283,21 @@ function fadeInAudio(audio, duration = 5000, targetVolume = 1) {
     } else {
       audio.volume = volume;
     }
-  }, intervalTime);
+  }, interval);
 }
 
+// ---------------------------------------------
+// PLAY AUDIO ON PAGE LOAD
+// ---------------------------------------------
 window.addEventListener("load", () => {
+  // Must resume AudioContext due to browser restriction
+  audioCtx.resume();
+
   fadeInAudio(bgMusic, 3000, 1);
 
-  // Play voice narration once
+  // Play narration (LOUD)
   voiceNarration.play().catch(() => {
-    // If blocked, play on first click
+    // If blocked, play on user interaction
     document.body.addEventListener("click", () => {
       voiceNarration.play();
       bgMusic.play();

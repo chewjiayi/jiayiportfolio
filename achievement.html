@@ -2,30 +2,335 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Achievement Page</title>
+  <title>Achievement</title>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100%;
-    }
-
     body {
-      /* Replace with your actual image filename */
-      background: url("achievement.png") no-repeat center center fixed;
-      background-size: cover; /* ensures the image fills the screen */
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: #1b120b;
+      color: #f8e0b0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .trophy-wrapper {
+      position: relative;
+      width: 100%;
+    }
+
+    .trophy-wrapper img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    .trophy-hotspot {
+      position: absolute;
+      top: 20%;
+      left: 37%;
+      width: 26%;
+      height: 20%;
+      cursor: pointer;
+      background: rgba(255,255,0,0);
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .puzzle-box {
+      background: #3a2415;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      width: fit-content;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+
+    .puzzle-layout {
+      display: flex;
+      gap: 20px;
+      margin-top: 12px;
+      justify-content: center;
+    }
+
+    .reference-panel img {
+      width: 360px;
+      height: 360px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .puzzle-container {
+      position: relative;
+      width: 360px;
+      height: 360px;
+      background: #1b120b;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tile {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background-size: 360px 360px;
+      border: 1px solid rgba(0,0,0,0.3);
+      cursor: grab;
+      transition: top 0.15s, left 0.15s;
+    }
+
+    .tile:active {
+      cursor: grabbing;
+    }
+    .character, .speech-bubble { position: absolute; z-index: 2; }
+    .character { left: -2%; bottom: 3%; width: 300px; animation: moveright 3s forwards ease-in-out; }
+    .speech-bubble { bottom: 300px; left: 100px; width: 400px; animation: moveUpLeft 3s forwards; }
+    @keyframes moveright { from { transform: translateX(0); } to { transform: translateX(20px); } }
+    @keyframes moveUpLeft { 0% { bottom: 50px; left: 30%; } 100% { bottom: 290px; left: 10%; } }
+    .buttons {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: #f6b352;
+      color: #3a2415;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.secondary {
+      background: #64412b;
+      color: #f8e0b0;
+    }
+
+    .win-msg {
+      margin-top: 10px;
+      font-weight: bold;
+      color: #ffec8b;
+      min-height: 1.3em;
     }
   </style>
 </head>
 <body>
+
+<!-- Background Music (no autoplay, will start after narration) -->
+<audio id="bgm" src="backgroundmusicforachievementpage.mp3" loop></audio>
+
+<!-- Narration -->
+<audio id="narration" src="achievementvoiceover.mp3"></audio>
+<img src="character.png" alt="character" class="character">
+    <img src="text3.png" alt="speech bubble" class="speech-bubble">
+<div class="trophy-wrapper">
+  <img id="trophyImage" src="">
+  <div class="trophy-hotspot" id="trophyHotspot"></div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="puzzle-box">
+    <h2>Image Puzzle</h2>
+    <p>Drag & drop pieces to swap them. Match the reference image to win.</p>
+
+    <div class="puzzle-layout">
+      <div class="reference-panel">
+        <img id="referenceImage" src="">
+      </div>
+
+      <div class="puzzle-container" id="puzzleContainer"></div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn" id="shuffleBtn">Shuffle</button>
+      <button class="btn secondary" id="closeBtn">Close</button>
+    </div>
+
+    <div class="win-msg" id="winMsg"></div>
+  </div>
+</div>
+
+<script>
+  // ---------------------- CONFIG ----------------------
+  const TROPHY_IMG = "achievement.png";
+  const PUZZLE_IMG = "puzzle1.jpg";
+
+  const NEXT_PAGE = "myachievement.html";   // redirect after solved
+  const ROWS = 3, COLS = 3;
+  const TILE_SIZE = 120;
+
+  // ---------------------- DOM ----------------------
+  const bgm = document.getElementById("bgm");
+  const narration = document.getElementById("narration");
+  const trophyImageEl = document.getElementById("trophyImage");
+  const referenceImage = document.getElementById("referenceImage");
+  const trophyHotspot = document.getElementById("trophyHotspot");
+  const overlay = document.getElementById("overlay");
+  const puzzleContainer = document.getElementById("puzzleContainer");
+  const shuffleBtn = document.getElementById("shuffleBtn");
+  const closeBtn = document.getElementById("closeBtn");
+  const winMsg = document.getElementById("winMsg");
+
+  let tiles = [];
+
+  // Set images
+  trophyImageEl.src = TROPHY_IMG;
+  referenceImage.src = PUZZLE_IMG;
+
+  // ---------------------- PLAY BGM AFTER NARRATION ----------------------
+  function startBackgroundMusic() {
+    const musicPromise = bgm.play();
+    if (musicPromise !== undefined) {
+      musicPromise.catch(() => {
+        // If bgm also gets blocked, start it on next user interaction
+        const startBgmOnClick = () => {
+          bgm.play();
+          window.removeEventListener("click", startBgmOnClick);
+        };
+        window.addEventListener("click", startBgmOnClick);
+      });
+    }
+  }
+
+  narration.addEventListener("ended", () => {
+    startBackgroundMusic();
+  });
+
+  // ---------------------- AUTO NARRATION ON PAGE LOAD ----------------------
+  window.addEventListener("load", () => {
+    const playPromise = narration.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // Autoplay blocked → play narration after first user click
+        const startNarrationOnClick = () => {
+          narration.play();
+          window.removeEventListener("click", startNarrationOnClick);
+        };
+
+        window.addEventListener("click", startNarrationOnClick);
+      });
+    }
+  });
+
+  // ---------------------- OPEN PUZZLE ----------------------
+  trophyHotspot.addEventListener("click", () => {
+    overlay.style.display = "flex";
+    winMsg.textContent = "";
+    setupPuzzle();
+    shufflePuzzle();
+  });
+
+  closeBtn.addEventListener("click", () => overlay.style.display = "none");
+
+  shuffleBtn.addEventListener("click", () => {
+    winMsg.textContent = "";
+    shufflePuzzle();
+  });
+
+  // ---------------------- PUZZLE LOGIC ----------------------
+  function setupPuzzle() {
+    puzzleContainer.innerHTML = "";
+    tiles = [];
+    let id = 0;
+
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const tile = document.createElement("div");
+        tile.className = "tile";
+
+        tile.style.backgroundImage = `url(${PUZZLE_IMG})`;
+        tile.style.backgroundPosition = `${-c * TILE_SIZE}px ${-r * TILE_SIZE}px`;
+
+        const obj = { id, el: tile, correctRow: r, correctCol: c, row: r, col: c };
+        tile.dataset.id = id++;
+
+        positionTile(obj);
+        enableDrag(obj);
+
+        tiles.push(obj);
+        puzzleContainer.appendChild(tile);
+      }
+    }
+  }
+
+  function positionTile(obj) {
+    obj.el.style.top = `${obj.row * TILE_SIZE}px`;
+    obj.el.style.left = `${obj.col * TILE_SIZE}px`;
+  }
+
+  function enableDrag(obj) {
+    const el = obj.el;
+    el.draggable = true;
+
+    el.addEventListener("dragstart", e => {
+      e.dataTransfer.setData("id", obj.id);
+    });
+
+    el.addEventListener("dragover", e => e.preventDefault());
+
+    el.addEventListener("drop", e => {
+      e.preventDefault();
+      const fromId = e.dataTransfer.getData("id");
+      const toId = obj.id;
+
+      if (fromId === toId) return;
+
+      const a = tiles.find(t => t.id == fromId);
+      const b = tiles.find(t => t.id == toId);
+
+      swapTiles(a, b);
+
+      if (isSolved()) {
+        winMsg.textContent = "You solved it! 🎉";
+
+        setTimeout(() => {
+          window.location.href = NEXT_PAGE;
+        }, 2000);
+      }
+    });
+  }
+
+  function swapTiles(a, b) {
+    [a.row, b.row] = [b.row, a.row];
+    [a.col, b.col] = [b.col, a.col];
+    positionTile(a);
+    positionTile(b);
+  }
+
+  function shufflePuzzle() {
+    const positions = tiles.map(t => ({ row: t.row, col: t.col }));
+
+    for (let i = positions.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [positions[i], positions[j]] = [positions[j], positions[i]];
+    }
+
+    tiles.forEach((t, i) => {
+      t.row = positions[i].row;
+      t.col = positions[i].col;
+      positionTile(t);
+    });
+  }
+
+  function isSolved() {
+    return tiles.every(t => t.row === t.correctRow && t.col === t.correctCol);
+  }
+</script>
+
 </body>
 </html>
